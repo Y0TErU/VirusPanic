@@ -3,17 +3,20 @@
 #include "ObjBase.h"
 #include "../Collider/Collider.h"
 
+Stage enemyToStage;
+const int EnemyMaxNum{ 5 };
+
 class Enemy : public ObjBase
 {
 public:
-	Enemy();
+	//Enemy();
 	void Initialize();
+	void Create(int pos_x_, int pos_y_);
 	void LoadTexture();				//描画の読み込み
 	void Update(ObjBase* target_);	//更新処理
 	void Draw() override;			//描画処理
 
 private:
-	const int EnemyMaxNum{ 5 };
 	float nextPosX{ posX };
 	float nextPosY{ posY };
 	float vecX{ 0.0f };		//移動方向ベクトル
@@ -31,8 +34,6 @@ private:
 
 };
 
-void InitializeEnemies(Enemy* enemy_);
-void CreateEnemies(Enemy* enemy_, int pos_x_, int pos_y_);
-
-
+void InitializeEnemies(Enemy* enemy_[EnemyMaxNum]);
+void CreateEnemies(Enemy* enemy_[EnemyMaxNum], int pos_x_, int pos_y_);
 

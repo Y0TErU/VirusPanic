@@ -3,6 +3,8 @@
 #include "ObjBase.h"
 #include "../Collider/Collider.h"
 
+Stage playerToStage;
+
 class Player : public ObjBase
 {
 public:

@@ -13,7 +13,7 @@ extern SceneStep g_CurrentSceneStep;
 extern int g_nextScene;
 
 Player vaccine;
-Enemy virus;
+Enemy virus[EnemyMaxNum];
 //Friend whiteBloodCell[maxFriendNum];
 
 Stage stage;
@@ -44,9 +44,24 @@ void ExecuteGameScene()
 void InitializeGameScene()
 {
 	//画像読み込み処理
-	g_count = 0;
 	vaccine.LoadTexture();
-	virus.LoadTexture();
+
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		virus[i].LoadTexture();
+	}
+	
+	//初期化処理
+	g_count = 0;
+
+	vaccine.Initialize();
+
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		virus[i].Initialize();
+	}
+	
+
 	g_time_handle = LoadGraph("Res/Digit01.png");
 	g_clock_handle = LoadGraph("Res/Icon_Clock.png");
 
@@ -55,12 +70,25 @@ void InitializeGameScene()
 
 void UpdateGameScene()
 {
-		//時間計測用
+	//時間計測用
+	g_count++;
 
 	//更新処理
 	vaccine.Update();
 
-	virus.Update(&vaccine);
+	if (g_count > 180)
+	{
+		for (int i = 0; i < EnemyMaxNum; i++)
+		{
+			virus[i].Create(virus->GetPosX(),virus->GetPosY());
+		}
+	}
+
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		virus[i].Update(&vaccine);
+	}
+	
 
 
 	g_count++;
@@ -70,7 +98,12 @@ void UpdateGameScene()
 
 	stage.Draw();
 	vaccine.Draw();
-	virus.Draw();
+
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		virus[i].Draw();
+	}
+
 	DrawGraph(200,0,g_time_handle,true);
 	DrawGraph(0,0, g_clock_handle,true);
 
@@ -83,7 +116,7 @@ void UpdateGameScene()
 	}
 	
 	
-	if (g_count >= 180)
+	if (g_count >= 600)
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = clear;
@@ -95,7 +128,11 @@ void UpdateGameScene()
 void TerminateGameScene()
 {
 	vaccine.Delete();
-	virus.Delete();
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		virus[i].Delete();
+	}
+	
 	DeleteGraph(g_time_handle);
 
 	if (g_nextScene == clear)

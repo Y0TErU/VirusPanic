@@ -4,8 +4,7 @@
 #include "Enemy.h"
 #include "Stage.h"
 
-Stage enemyToStage;
-
+/*
 Enemy::Enemy()
 {
 	posX = 148;
@@ -27,10 +26,28 @@ Enemy::Enemy()
 
 }
 
+*/
+
 void Enemy::Initialize()
 {
+	posX = 148;
+	posY = 600;
+	speed = 5.2;
+	isActive = false;
+	height = 75;
+	width = 90;
+	enemyCollider =
+	{
+		posX,posY,
+		width,height
+	};
+}
 
-
+void Enemy::Create(int pos_x_, int pos_y_)
+{
+	posX = pos_x_;
+	posY = pos_y_;
+	isActive = true;
 }
 
 void Enemy::LoadTexture()
@@ -117,13 +134,27 @@ void Enemy::Draw()
 	}
 }
 
-void InitializeEnemies(Enemy* enemy_)
+void InitializeEnemies(Enemy* enemy_[EnemyMaxNum])
 {
-	enemy_->Initialize();
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		if (enemy_[i]->GetIsActive() == true)
+		{
+			enemy_[i]->Initialize();
+		}
+	}
+	
 }
 
-void CreateEnemies(Enemy* enemy_, int pos_x_, int pos_y_)
+void CreateEnemies(Enemy* enemy_[EnemyMaxNum], int pos_x_, int pos_y_)
 {
-	
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		if (enemy_[i]->GetIsActive() == false)
+		{
+			enemy_[i]->Create(pos_x_,pos_y_);
+		}
+		break;
+	}
 
 }

@@ -4,26 +4,24 @@
 #include "Friend.h"
 #include "Stage.h"
 
-Stage FriendToStage;
-
-Friend::Friend()
+void Friend::Initialize()
 {
-	posX = 0;
-	posY = 0;
-	speed = 0;
 	isActive = false;
-	handle = -1;
-	friendCounter = 0;
-	height = 96;	//ècïù
-	width = 96;	//â°ïù
+	height = 96;
+	width = 96;
 
 }
 
-
+void Friend::Create(int pos_x_,int pos_y_)
+{
+	posX = pos_x_;
+	posY = pos_y_;
+	isActive = true;
+}
 
 void Friend::Update()
 {
-
+	
 }
 
 void Friend::LoadTexture()
@@ -40,5 +38,30 @@ void Friend::Draw()
 	{
 		DrawGraph((int)posX, (int)posY, handle, true);
 	}
+}
+
+void InitializeFriend(Friend* friend_[FriendMaxNum])
+{
+	for (int i = 0; i < FriendMaxNum; i++)
+	{
+		if (friend_[i]->GetIsActive() == true)
+		{
+			friend_[i]->Initialize();
+		}
+	}
+
+}
+
+void CreateFriend(Friend* friend_[FriendMaxNum])
+{
+	for (int i = 0; i < FriendMaxNum; i++)
+	{
+		if (friend_[i]->GetIsActive() == false)
+		{
+			friend_[i]->Create();
+		}
+		break;
+	}
+
 }
 
