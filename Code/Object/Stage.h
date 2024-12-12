@@ -13,6 +13,11 @@ class Stage
 public:
 	void Draw();	//描画処理
 
+	void GetRandomStage();
+
+	int GetStagePosX();
+	int GetStagePosY();
+
 	//ステージとの当たり判定
 	bool OnCollisionStageToRect(int min_x_, int max_x_, int min_y_, int max_y_,
 		float vec_x_, float vec_y_, float* side_x_, float* side_y_);
@@ -22,11 +27,14 @@ public:
 private:
 	int posX{ 0 };
 	int posY{ 0 };
+	int getPosX{ 0 };
+	int getPosY{ 0 };
 	int stageArrange[mapHeight][mapwidth]	//ステージの配置
 	{
 		/*
 			0：移動可能エリア
-			1：壁
+			1：壁(白血球生成エリア)
+			2：壁(何も出来ないエリア)
 		*/
 		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},		//1列
 		{ 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},		//2列

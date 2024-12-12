@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "Stage.h"
 
+Stage playerToStage;
+
 void Player::Initialize()
 {
 	posX = 148;

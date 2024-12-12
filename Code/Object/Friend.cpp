@@ -4,24 +4,36 @@
 #include "Friend.h"
 #include "Stage.h"
 
+Stage FriendToStage;
+
 void Friend::Initialize()
 {
 	isActive = false;
 	height = 96;
 	width = 96;
-
+	currentState = fine;
+	friendCounter = 0;
+	timeCount = 0;
 }
 
-void Friend::Create(int pos_x_,int pos_y_)
+void Friend::Create()
 {
-	posX = pos_x_;
-	posY = pos_y_;
+	FriendToStage.GetRandomStage();
+	posX = FriendToStage.GetStagePosX();
+	posY = FriendToStage.GetStagePosY();
 	isActive = true;
 }
 
 void Friend::Update()
 {
-	
+	timeCount++;
+	if (timeCount >= changeStateInterval)
+	{
+		if (currentState == fine)
+		{
+			currentState = tired;
+		}
+	}
 }
 
 void Friend::LoadTexture()

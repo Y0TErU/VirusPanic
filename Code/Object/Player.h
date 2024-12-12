@@ -3,7 +3,6 @@
 #include "ObjBase.h"
 #include "../Collider/Collider.h"
 
-Stage playerToStage;
 
 class Player : public ObjBase
 {
@@ -18,7 +17,7 @@ private:
 	float nextPosY{ posY };
 	float vecX{ 0.0f };		//移動用ベクトル
 	float vecY{ 0.0f };
-	float height{ 50 };	//縦幅
+	float height{ 50 };		//縦幅
 	float width{ 75 };
 
 	RectCollider playerCollider		//当たり判定用

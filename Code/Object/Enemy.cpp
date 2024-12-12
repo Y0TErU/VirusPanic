@@ -4,6 +4,8 @@
 #include "Enemy.h"
 #include "Stage.h"
 
+Stage enemyToStage;
+
 /*
 Enemy::Enemy()
 {

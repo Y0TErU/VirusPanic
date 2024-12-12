@@ -2,6 +2,8 @@
 
 #include <Dxlib.h>
 #include <math.h>
+#include <stdlib.h>
+
 
 void Stage::Draw()
 {
@@ -32,7 +34,7 @@ bool Stage::OnCollisionStageToRect(int min_x_, int max_x_, int min_y_, int max_y
 	{
 		for (int j = min_x_; j <= max_x_; j++)
 		{
-if (stageArrange[i][j] != 0)
+			if (stageArrange[i][j] != 0)
 			{
 				if (side_x_ != nullptr)
 				{
@@ -105,4 +107,54 @@ bool Stage::OnCollisionStageAndRect(RectCollider rect_, float vec_x_, float vec_
 	}
 
 	return isCollision;
+}
+
+void Stage::GetRandomStage()
+{
+	bool selectedStage = true;
+	int vertical;		//c
+	int beside;			//‰¡
+
+	vertical = 2;
+	beside = 2;
+
+	getPosX = mapOffSetX + blockSize * beside;
+	getPosY = mapOffSetY + blockSize * vertical;
+
+	if (stageArrange[vertical][beside] == 1)
+	{
+		//stageArrange[vertical][beside] == 2;
+		
+	}
+	/*
+	while (selectedStage = true)
+	{
+		vertical = 0;
+		beside = 0;
+
+		vertical = rand() % 11;
+		beside = rand() % 19;
+
+		if (stageArrange[vertical][beside] == 1)
+		{
+			stageArrange[vertical][beside] == 2;
+			getPosX = mapOffSetX + blockSize * beside;
+			getPosY = mapOffSetY + blockSize * vertical;
+			selectedStage = false;
+		}
+
+	}
+	*/
+
+	
+}
+
+int Stage::GetStagePosX()
+{
+	return getPosX;
+}
+
+int Stage::GetStagePosY()
+{
+	return getPosY;
 }

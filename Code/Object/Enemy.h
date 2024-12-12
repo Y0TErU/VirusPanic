@@ -3,7 +3,6 @@
 #include "ObjBase.h"
 #include "../Collider/Collider.h"
 
-Stage enemyToStage;
 const int EnemyMaxNum{ 5 };
 
 class Enemy : public ObjBase
