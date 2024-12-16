@@ -6,30 +6,6 @@
 
 Stage enemyToStage;
 
-/*
-Enemy::Enemy()
-{
-	posX = 148;
-	posY = 600;
-	nextPosX = 0;
-	nextPosY = 0;
-	speed = 5.2;
-	isActive = false;
-	handle = -1;
-	vecX = 0.0f;
-	vecY = 0.0f;
-	height = 75;
-	width = 90;
-	enemyCollider =
-	{
-		posX,posY,
-		width,height
-	};
-
-}
-
-*/
-
 void Enemy::Initialize()
 {
 	posX = 148;
@@ -38,6 +14,7 @@ void Enemy::Initialize()
 	isActive = false;
 	height = 75;
 	width = 90;
+	enemyCounter = 0;
 	enemyCollider =
 	{
 		posX,posY,
@@ -63,10 +40,7 @@ void Enemy::LoadTexture()
 void Enemy::Update(ObjBase* target_)
 {
 	target = target_;
-	for (int i = 0; i < EnemyMaxNum; i++)
-	{
 
-	}
 	if (isActive == true)
 	{
 		nextPosX = posX;
@@ -85,7 +59,6 @@ void Enemy::Update(ObjBase* target_)
 
  		float side = 0.0f;
 		enemyCollider.posX = nextPosX;
-		
 
 		if (enemyToStage.OnCollisionStageAndRect(enemyCollider, vecX, 0.0f, &side, nullptr) == false)
 		{
@@ -93,15 +66,27 @@ void Enemy::Update(ObjBase* target_)
 		}
 		else 
 		{
+			if (vecY > 0.0f)
+			{
+				posY = nextPosY;
+			}
+			else if (vecY < 0.0f)
+			{
+				posY = nextPosY;
+			}
+			posX = (side - width) - 1.0f;
+			/*
 			if (vecX > 0.0f)
 			{
-				posX = (side - width) - 1.0f;
+				
 			}
 			else if (vecX < 0.0f)
 			{
 				posX = side + 1.0f;
 			}
-			posY = nextPosY;
+			*/
+			
+			//posY = nextPosY;
 			enemyCollider.posX = posX;
 		}
 
@@ -156,6 +141,7 @@ void CreateEnemies(Enemy* enemy_[EnemyMaxNum], int pos_x_, int pos_y_)
 		{
 			enemy_[i]->Create(pos_x_,pos_y_);
 		}
+
 		break;
 	}
 

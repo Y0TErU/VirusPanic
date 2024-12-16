@@ -11,8 +11,7 @@ void Friend::Initialize()
 	isActive = false;
 	height = 96;
 	width = 96;
-	currentState = fine;
-	friendCounter = 0;
+	currentState = false;
 	timeCount = 0;
 }
 
@@ -29,9 +28,9 @@ void Friend::Update()
 	timeCount++;
 	if (timeCount >= changeStateInterval)
 	{
-		if (currentState == fine)
+		if (currentState == false)
 		{
-			currentState = tired;
+			currentState = true;
 		}
 	}
 }

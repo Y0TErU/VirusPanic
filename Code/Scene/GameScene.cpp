@@ -69,6 +69,7 @@ void InitializeGameScene()
 	}
 	
 
+	//描画の読み込み
 	g_time_handle = LoadGraph("Res/Digit01.png");
 	g_clock_handle = LoadGraph("Res/Icon_Clock.png");
 
@@ -77,34 +78,54 @@ void InitializeGameScene()
 
 void UpdateGameScene()
 {
-	//時間計測用
-	g_count++;
-	//更新処理
-	vaccine.Update();
 
-	
-	if (g_count == 180)
+	//生成処理
+	if (g_count == 0)	//初期生成
 	{
 		for (int i = 0; i < EnemyMaxNum; i++)
 		{
-			virus[i].Create(virus->GetPosX(),virus->GetPosY());
+			virus[i].Create(virus->GetPosX(), virus->GetPosY());
+			break;
 		}
-		for (int i = 0; i < FriendMaxNum; i++)
+		for (int i = 0; i < initialFriendNum; i++)
 		{
 			whiteBloodCell[i].Create();
 		}
-		g_count = false;
 	}
+	
+	if (g_count % 960 == 0)
+	{
+		for (int i = 0; i < FriendMaxNum; i++)
+		{
+			whiteBloodCell[i].Create();
+			break;
+		}
+	}
+	
+	
+
+	//更新処理
+	vaccine.Update();
 
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
-		virus[i].Update(&vaccine);
+		if (whiteBloodCell[i].GetCurrentState() == false)
+		{
+			virus[i].Update(&vaccine);
+		}
+		else
+		{
+			virus[i].Update(&whiteBloodCell[i]);
+		}
+		
 	}
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
 		whiteBloodCell[i].Update();
 	}
 
+	//時間計測用
+	g_count++;
 
 	//描画処理
 	ClearDrawScreen();
@@ -133,7 +154,7 @@ void UpdateGameScene()
 	}
 	
 	
-	if (g_count >= 600)
+	if (CheckHitKey(KEY_INPUT_RETURN))
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = clear;

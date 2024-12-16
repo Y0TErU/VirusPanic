@@ -4,7 +4,7 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	ChangeWindowMode(true);
+	ChangeWindowMode(false);
 	SetGraphMode(1920, 1080, 32);
 	if (DxLib_Init() == -1)		// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»ˆ—
 	{

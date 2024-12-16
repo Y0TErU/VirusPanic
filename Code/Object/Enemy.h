@@ -22,6 +22,7 @@ private:
 	float vecY{ 0.0f };
 	float height{ 75 };	//c•
 	float width{ 90 };	//‰¡•
+	float enemyCounter{ 0 };
 	
 	RectCollider enemyCollider
 	{

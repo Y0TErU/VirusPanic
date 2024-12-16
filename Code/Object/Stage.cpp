@@ -115,22 +115,8 @@ void Stage::GetRandomStage()
 	int vertical;		//èc
 	int beside;			//â°
 
-	vertical = 2;
-	beside = 2;
-
-	getPosX = mapOffSetX + blockSize * beside;
-	getPosY = mapOffSetY + blockSize * vertical;
-
-	if (stageArrange[vertical][beside] == 1)
+	while (true)
 	{
-		//stageArrange[vertical][beside] == 2;
-		
-	}
-	/*
-	while (selectedStage = true)
-	{
-		vertical = 0;
-		beside = 0;
 
 		vertical = rand() % 11;
 		beside = rand() % 19;
@@ -140,11 +126,10 @@ void Stage::GetRandomStage()
 			stageArrange[vertical][beside] == 2;
 			getPosX = mapOffSetX + blockSize * beside;
 			getPosY = mapOffSetY + blockSize * vertical;
-			selectedStage = false;
+			break;
 		}
 
 	}
-	*/
 
 	
 }
