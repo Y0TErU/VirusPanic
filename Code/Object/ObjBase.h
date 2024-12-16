@@ -12,9 +12,20 @@ public:
 	{
 		posX = 0;			//X座標
 		posY = 0;			//Y座標
+		width = 0;			//横幅
+		height = 0;			//縦幅
 		speed = 0.0f;		//速度
-		isActive = false;	//生存フラグ
-		handle = -1;		//描画ハンドル
+		isActive = false;	//生存フラグ	
+		handle_front = -1;	//正面の画像
+		handle_left = -1;	//横の画像
+		handle_right = -1;	//横の画像
+		handle_back = -1;	//後ろの画像
+
+		rect_collider =
+		{
+			posX,posY,
+			width,height
+		};
 	}
 
 	//オブジェクトの処理
@@ -22,7 +33,10 @@ public:
 	virtual void Draw() = 0;		//描画
 	void Delete()					//描画の削除
 	{
-		DeleteGraph(handle);
+		DeleteGraph(handle_front);
+		DeleteGraph(handle_right);
+		DeleteGraph(handle_left);
+		DeleteGraph(handle_back);
 	}
 
 	//ゲッター
@@ -38,9 +52,10 @@ public:
 	{
 		return isActive;
 	}
-	int GetHandle()
+
+	RectCollider* GetCollider()
 	{
-		return handle;
+		return &rect_collider;
 	}
 
 	//セッター
@@ -58,10 +73,19 @@ public:
 	}
 
 protected:
-	float posX;			//X座標
-	float posY;			//Y座標
+	int posX;			//X座標
+	int posY;			//Y座標
+	int width;
+	int height;
 	float speed;		//速度
 	bool isActive;		//生存フラグ
-	int handle;			//描画ハンドル
+
+	RectCollider rect_collider;	//当たり判定用	
+
+	//描画ハンドル
+	int handle_front;	//正面の画像
+	int handle_right;	//右向きの画像
+	int handle_left;	//左向きの画像
+	int handle_back;	//後ろの画像
 	
 };

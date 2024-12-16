@@ -53,6 +53,9 @@ void InitializeGameScene()
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
 		virus[i].LoadTexture();
+	}
+	for (int i = 0; i < FriendMaxNum; i++)
+	{
 		whiteBloodCell[i].LoadTexture();
 	}
 	
@@ -71,7 +74,6 @@ void InitializeGameScene()
 		whiteBloodCell[i].Initialize();
 	}
 	
-
 	//•`‰æ‚Ì“Ç‚Ýž‚Ý
 	g_time_handle = LoadGraph("Res/Digit01.png");
 	g_clock_handle = LoadGraph("Res/Icon_Clock.png");
@@ -90,7 +92,7 @@ void UpdateGameScene()
 			virus[i].Create((int)virus->GetPosX(), (int)virus->GetPosY());
 			break;
 		}
-		for (int i = 0; i < FriendMaxNum; i++)
+		for (int i = 0; i < initialFriendNum; i++)
 		{
 			whiteBloodCell[i].Create();
 			friend_Counter = i;
@@ -126,6 +128,7 @@ void UpdateGameScene()
 		else
 		{
 			virus[i].Update(&whiteBloodCell[i]);
+			virus[i].ToFriend(&whiteBloodCell[i]);
 		}
 		
 	}
@@ -147,7 +150,7 @@ void UpdateGameScene()
 	{
 		virus[i].Draw();
 	}
-	for (int i = 0; i < FriendMaxNum; i++)
+	for (int i = 0; i <= FriendMaxNum; i++)
 	{
 		whiteBloodCell[i].Draw();
 	}
@@ -157,7 +160,7 @@ void UpdateGameScene()
 
 	ScreenFlip();
 	
-	if (CheckHitKey(KEY_INPUT_TAB))
+	if (vaccine.GetIsActive() == false)
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = over;

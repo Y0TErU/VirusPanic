@@ -48,18 +48,20 @@ void Friend::Update()
 
 void Friend::LoadTexture()
 {
-	if (handle == -1)
+	if (handle_front == -1)
 	{
-		handle = LoadGraph("Res/Object/WhiteBloodCell.png");
+		handle_front = LoadGraph("Res/Object/WhiteBloodCell.png");
 	}
 }
 
 void Friend::Draw()
 {
-	if (isActive = true)
+	
+	if (isActive == true)
 	{
-		DrawGraph((int)posX, (int)posY, handle, true);
+		DrawExtendGraph((int)posX, (int)posY, posX + width, posY + height, handle_front, true);
 	}
+	
 }
 
 /*

@@ -3,18 +3,18 @@
 //矩形の判定
 struct RectCollider
 {
-	float posX;		//X座標
-	float posY;		//Y座標
-	float width;	//横幅
-	float height;	//縦幅
+	int posX;		//X座標
+	int posY;		//Y座標
+	int width;	//横幅
+	int height;	//縦幅
 };
 
 //円の判定
 struct CircleCollider
 {
-	float posX;		//X座標
-	float posY;		//Y座標
-	float radius;
+	int posX;		//X座標
+	int posY;		//Y座標
+	int radius;
 };
 
 //矩形と矩形の当たり判定用関数

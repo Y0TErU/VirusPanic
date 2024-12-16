@@ -28,8 +28,8 @@ private:
 	bool currentState{ false };	//現在のステータス(false は元気状態)
 	
 	int timeCount{ 0 };
-	float height{ 96 };	//縦幅
-	float width{ 96 };	//横幅
+	int height{ 96 };	//縦幅
+	int width{ 96 };	//横幅
 
 	RectCollider enemyCollider
 	{

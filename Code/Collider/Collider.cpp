@@ -21,9 +21,9 @@ bool OnCollisionRectToRect(RectCollider collider_01_, RectCollider collider_02_)
 		rect01_min_y <= rect02_max_y &&		//01‚Ìã•Ó‚ª02‚Ì‰º•Ó‚æ‚è‰º‚É‚ ‚é
 		rect02_min_y <= rect01_max_y)		//02‚Ìã•Ó‚ª01‚Ì‰º•Ó‚æ‚èã‚É‚ ‚é
 	{
-		return false;	//“–‚½‚Á‚Ä‚¢‚È‚¢
+		return true;	//“–‚½‚Á‚Ä‚¢‚é
 	}
-	return true;		//“–‚½‚Á‚Ä‚¢‚é
+	return false;		//“–‚½‚Á‚Ä‚¢‚È‚¢
 }
 
 //‰~‚Æ‰~‚Ì“–‚½‚è”»’è—pŠÖ”

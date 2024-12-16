@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ObjBase.h"
-#include "../Collider/Collider.h"
 
 const int EnemyMaxNum{ 5 };
 
@@ -15,21 +14,16 @@ public:
 	void Update(ObjBase* target_);	//更新処理
 	void Draw() override;			//描画処理
 
+	void ToPlayer(ObjBase* player_);
+	void ToFriend(ObjBase* friend_);
+
 private:
-	float nextPosX{ posX };
-	float nextPosY{ posY };
+	int nextPosX{ posX };
+	int nextPosY{ posY };
 	float vecX{ 0.0f };		//移動方向ベクトル
 	float vecY{ 0.0f };
-	float height{ 75 };	//縦幅
-	float width{ 90 };	//横幅
 	float enemyCounter{ 0 };
 	
-	RectCollider enemyCollider
-	{
-		posX,posY,
-		width,height
-	};
-
 	ObjBase* target{ nullptr };	//追跡先
 
 };

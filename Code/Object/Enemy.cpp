@@ -15,7 +15,7 @@ void Enemy::Initialize()
 	height = 75;
 	width = 90;
 	enemyCounter = 0;
-	enemyCollider =
+	rect_collider =
 	{
 		posX,posY,
 		width,height
@@ -31,15 +31,28 @@ void Enemy::Create(int pos_x_, int pos_y_)
 
 void Enemy::LoadTexture()
 {
-	if (handle == -1)
+	if (handle_front == -1)
 	{
-		handle = LoadGraph("Res/Object/Virus.png");
+		handle_front = LoadGraph("Res/Object/virus_front.png");
 	}
+	if (handle_right == -1)
+	{
+		handle_right = LoadGraph("Res/Object/virus_right.png");
+	}
+	if (handle_left == -1)
+	{
+		handle_left = LoadGraph("Res/Object/virus_left.png");
+	}
+	if (handle_back == -1)
+	{
+		handle_back = LoadGraph("Res/Object/virus_back.png");
+	}
+	
 }
 
 void Enemy::Update(ObjBase* target_)
 {
-	target = target_;
+	target = target_;	//追跡対象のアドレス
 
 	if (isActive == true)
 	{
@@ -58,40 +71,27 @@ void Enemy::Update(ObjBase* target_)
 		nextPosY += vecY / length * speed;
 
  		float side = 0.0f;
-		enemyCollider.posX = nextPosX;
+		rect_collider.posX = nextPosX;
 
-		if (enemyToStage.OnCollisionStageAndRect(enemyCollider, vecX, 0.0f, &side, nullptr) == false)
+		if (enemyToStage.OnCollisionStageAndRect(rect_collider, vecX, 0.0f, &side, nullptr) == false)
 		{
 			posX = nextPosX;
 		}
 		else 
 		{
-			if (vecY > 0.0f)
-			{
-				posY = nextPosY;
-			}
-			else if (vecY < 0.0f)
-			{
-				posY = nextPosY;
-			}
-			posX = (side - width) - 1.0f;
-			/*
 			if (vecX > 0.0f)
 			{
-				
+				posX = (side - width) - 1.0f;
 			}
 			else if (vecX < 0.0f)
 			{
 				posX = side + 1.0f;
 			}
-			*/
-			
-			//posY = nextPosY;
-			enemyCollider.posX = posX;
+			rect_collider.posX = posX;
 		}
 
-		enemyCollider.posY = nextPosY;
-		if (enemyToStage.OnCollisionStageAndRect(enemyCollider, 0.0f, vecY, nullptr, &side) == false)
+		rect_collider.posY = nextPosY;
+		if (enemyToStage.OnCollisionStageAndRect(rect_collider, 0.0f, vecY, nullptr, &side) == false)
 		{
 			posY = nextPosY;
 		}
@@ -106,20 +106,51 @@ void Enemy::Update(ObjBase* target_)
 				posY = side + 1.0f;
 			}
 			posX = nextPosX;
-			enemyCollider.posY = posY;
+			rect_collider.posY = posY;
 			
 		}
-		
+	}
+}
+
+void Enemy::ToPlayer(ObjBase* player_)
+{
+	if (OnCollisionRectToRect(rect_collider,*player_->GetCollider()) == true)
+	{
+		player_->SetIsActive(false);
+	}
+}
+
+void Enemy::ToFriend(ObjBase* friend_)
+{
+	if (OnCollisionRectToRect(rect_collider, *friend_->GetCollider()) == true)
+	{
+		friend_->SetIsActive(false);
 	}
 }
 
 void Enemy::Draw()
 {
-	if (isActive)
+	if (isActive == true)
 	{
-		DrawGraph((int)posX, (int)posY, handle, true);
+		if (vecY > 0.0f)	//下向きに移動中
+		{
+			DrawExtendGraph((int)posX, (int)posY, (int)posX + (int)width, (int)posY + (int)height, handle_front, true);	//正面を向いている
+		}
+		else if (vecY < 0.0f)	//上向きに移動中
+		{
+			DrawExtendGraph((int)posX, (int)posY, (int)posX + (int)width, (int)posY + (int)height, handle_back, true);	//後ろを向いている
+		}
+		else if (vecX > 0.0f)	//右向きに移動中
+		{
+			DrawExtendGraph((int)posX, (int)posY, (int)posX + (int)width, (int)posY + (int)height, handle_right, true);	//右を向いている
+		}
+		else if (vecX < 0.0f)	//左向きに移動中
+		{
+			DrawExtendGraph((int)posX, (int)posY, (int)posX + (int)width, (int)posY + (int)height, handle_left, true);	//左を向いている
+		}
 	}
 }
+
 
 void InitializeEnemies(Enemy* enemy_[EnemyMaxNum])
 {
@@ -130,7 +161,6 @@ void InitializeEnemies(Enemy* enemy_[EnemyMaxNum])
 			enemy_[i]->Initialize();
 		}
 	}
-	
 }
 
 void CreateEnemies(Enemy* enemy_[EnemyMaxNum], int pos_x_, int pos_y_)

@@ -6,7 +6,7 @@ class Button
 {
 public:
 	void LoadTexture(int handle_);
-	void Update(float pos_x_, float pos_y_, float width_, float height_);
+	void Update(int pos_x_, int pos_y_, int width_, int height_);
 	void Draw();
 
 	bool GetMouseClick()
@@ -16,10 +16,10 @@ public:
 
 private:
 	bool mouseClick{ false };
-	float posX{ 0 };
-	float posY{ 0 };
-	float height{ 0 };
-	float width{ 0 };
+	int posX{ 0 };
+	int posY{ 0 };
+	int height{ 0 };
+	int width{ 0 };
 	int handle{ -1 };
 	RectCollider buttonCollider
 	{
