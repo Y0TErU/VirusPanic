@@ -9,11 +9,11 @@ const int initialFriendNum{ 5 };
 class Friend : public ObjBase
 {
 public:
-	void Initialize();
-	void Create();
-	void LoadTexture();		//描画の読み込み
-	void Update();			//更新処理
-	void Draw() override;	//描画処理
+	void Initialize() override;	//初期化
+	void Create();				//生成
+	void LoadTexture();			//描画の読み込み
+	void Update();				//更新処理
+	void Draw() override;		//描画処理
 
 	//ステータスのゲッター
 	bool GetCurrentState()
@@ -38,7 +38,8 @@ private:
 	};
 };
 
-void InitializeFriend(Friend* friend_[FriendMaxNum]);
-void CreateFriend(Friend* friend_[FriendMaxNum]);
+//void InitializeFriend(ObjBase* friend_[FriendMaxNum]);
+
+void CreateFriends(Friend* friend_[FriendMaxNum]);
 
 

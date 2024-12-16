@@ -24,6 +24,8 @@ int g_clock_handle = -1;
 
 int g_count = 0;
 
+int friend_Counter;
+
 void ExecuteGameScene()
 {
 	switch (g_CurrentSceneStep)
@@ -56,6 +58,7 @@ void InitializeGameScene()
 	
 	//‰Šú‰»ˆ—
 	g_count = 0;
+	friend_Counter = 0;
 
 	vaccine.Initialize();
 
@@ -84,16 +87,24 @@ void UpdateGameScene()
 	{
 		for (int i = 0; i < EnemyMaxNum; i++)
 		{
-			virus[i].Create(virus->GetPosX(), virus->GetPosY());
+			virus[i].Create((int)virus->GetPosX(), (int)virus->GetPosY());
 			break;
 		}
-		for (int i = 0; i < initialFriendNum; i++)
+		for (int i = 0; i < FriendMaxNum; i++)
 		{
 			whiteBloodCell[i].Create();
+			friend_Counter = i;
 		}
 	}
 	
-	if (g_count % 960 == 0)
+	if (g_count % 180 == 0 && g_count != 0)
+	{
+		friend_Counter++;
+		whiteBloodCell[friend_Counter].Create();
+		
+	}
+	/*
+	if (g_count % 960 == 0 && g_count != 0)
 	{
 		for (int i = 0; i < FriendMaxNum; i++)
 		{
@@ -101,9 +112,8 @@ void UpdateGameScene()
 			break;
 		}
 	}
+	*/
 	
-	
-
 	//XVˆ—
 	vaccine.Update();
 
@@ -142,8 +152,8 @@ void UpdateGameScene()
 		whiteBloodCell[i].Draw();
 	}
 
-	DrawGraph(200,0,g_time_handle,true);
-	DrawGraph(0,0, g_clock_handle,true);
+	//DrawGraph(200,0,g_time_handle,true);
+	//DrawGraph(0,0, g_clock_handle,true);
 
 	ScreenFlip();
 	

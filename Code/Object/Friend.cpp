@@ -8,6 +8,8 @@ Stage FriendToStage;
 
 void Friend::Initialize()
 {
+	posX = 0;
+	posY = 0;
 	isActive = false;
 	height = 96;
 	width = 96;
@@ -17,22 +19,31 @@ void Friend::Initialize()
 
 void Friend::Create()
 {
-	FriendToStage.GetRandomStage();
-	posX = FriendToStage.GetStagePosX();
-	posY = FriendToStage.GetStagePosY();
-	isActive = true;
+	if (isActive == false)
+	{
+		FriendToStage.GetRandomStage();
+		posX = (float)FriendToStage.GetStagePosX();
+		posY = (float)FriendToStage.GetStagePosY();
+		isActive = true;
+	}
+	
+	
 }
 
 void Friend::Update()
 {
 	timeCount++;
-	if (timeCount >= changeStateInterval)
+	if (isActive == true)
 	{
-		if (currentState == false)
+		if (timeCount >= changeStateInterval)
 		{
-			currentState = true;
+			if (currentState == false)
+			{
+				currentState = true;
+			}
 		}
 	}
+	
 }
 
 void Friend::LoadTexture()
@@ -45,34 +56,29 @@ void Friend::LoadTexture()
 
 void Friend::Draw()
 {
-	if (isActive)
+	if (isActive = true)
 	{
 		DrawGraph((int)posX, (int)posY, handle, true);
 	}
 }
 
-void InitializeFriend(Friend* friend_[FriendMaxNum])
+/*
+void InitializeFriend(ObjBase* friend_)
+{
+	if (friend_->GetIsActive() == true)
+	{
+		friend_->Initialize();
+	}
+}
+*/
+
+void CreateFriends(Friend* friend_[FriendMaxNum])
 {
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
-		if (friend_[i]->GetIsActive() == true)
-		{
-			friend_[i]->Initialize();
-		}
+		friend_[i]->Create();
 	}
-
 }
 
-void CreateFriend(Friend* friend_[FriendMaxNum])
-{
-	for (int i = 0; i < FriendMaxNum; i++)
-	{
-		if (friend_[i]->GetIsActive() == false)
-		{
-			friend_[i]->Create();
-		}
-		break;
-	}
 
-}
 
