@@ -20,6 +20,7 @@ void Friend::Initialize()
 		posX, posY,
 		width, height
 	};
+	handle_front = -1;
 }
 
 void Friend::Create()

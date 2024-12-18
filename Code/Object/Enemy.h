@@ -15,7 +15,8 @@ public:
 	void Draw() override;			//•`‰æˆ—
 
 	void ToPlayer(ObjBase* player_);
-	void ToFriend(ObjBase* friend_);
+	void ToFriend(bool isTouch_, RectCollider* friend_top_, RectCollider* friend_botom_, RectCollider* friend_left_, RectCollider* friend_right_);
+	bool TouchFriend(bool isActive_);
 
 private:
 	int nextPosX{ posX };
@@ -23,6 +24,7 @@ private:
 	float vecX{ 0.0f };		//ˆÚ“®•ûŒüƒxƒNƒgƒ‹
 	float vecY{ 0.0f };
 	float enemyCounter{ 0 };
+	bool canTouch{ false };
 	
 	ObjBase* target{ nullptr };	//’ÇÕæ
 

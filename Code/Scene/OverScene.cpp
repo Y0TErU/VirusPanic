@@ -34,19 +34,23 @@ void InitializeOverScene()
 {
 	SetBackgroundColor(0, 0, 0);
 
-	int title_text_handle = LoadGraph("Res/Ui/Icon_SquareStraight.png");
-	int replay_text_handle = LoadGraph("Res/Ui/Icon_SquareStraight.png");
+	int title_text_handle = LoadGraph("Res/Text/returntitle_write.png");
+	int replay_text_handle = LoadGraph("Res/Text/onemoreplay_write.png");
 
 	SetMouseDispFlag(TRUE);	//マウスを表示
 
 	textTitle.LoadTexture(title_text_handle);
 	textReplay.LoadTexture(replay_text_handle);
 
+	textTitle.Initialize();
+	textReplay.Initialize();
+
+	g_nextScene = 0;
+
 	g_CurrentSceneStep = update;
 }
 void UpdateOverScene()
 {
-	g_nextScene = 0;
 
 	textTitle.Update(660, 700, 600, 150);
 	textReplay.Update(660, 900, 600, 150);
@@ -79,7 +83,7 @@ void TerminateOverScene()
 	{
 		g_CurrentSceneType = title;
 	}
-	if (g_nextScene == game)
+	else if (g_nextScene == game)
 	{
 		g_CurrentSceneType = game;
 	}

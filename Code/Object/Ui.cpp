@@ -35,6 +35,7 @@ void Button::Update(int pos_x_, int pos_y_, int width_, int height_)
 		float enlargementWidth = (float)width * magnification;
 		float enlargementHeight = (float)height * magnification;
 
+		posX = posX - ((enlargementWidth - width) / 2);
 		posY = posY - ((enlargementHeight - height) / 2);
 		width = enlargementWidth;
 		height = enlargementHeight;

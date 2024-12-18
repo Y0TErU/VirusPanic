@@ -20,6 +20,11 @@ void Enemy::Initialize()
 		posX,posY,
 		width,height
 	};
+
+	handle_front = -1;
+	handle_right = -1;
+	handle_left = -1;
+	handle_back = -1;
 }
 
 void Enemy::Create(int pos_x_, int pos_y_)
@@ -120,13 +125,35 @@ void Enemy::ToPlayer(ObjBase* player_)
 	}
 }
 
-void Enemy::ToFriend(ObjBase* friend_)
+void Enemy::ToFriend(bool isTouch_, RectCollider* friend_top_, RectCollider* friend_botom_, RectCollider* friend_left_, RectCollider* friend_right_)
 {
-	if (OnCollisionRectToRect(rect_collider, *friend_->GetCollider()) == true)
+	if (isTouch_ == true)
 	{
-		friend_->SetIsActive(false);
+		//上1マスの判定
+		if (OnCollisionRectToRect(rect_collider, *friend_top_) == true || OnCollisionRectToRect(rect_collider, *friend_botom_) == true ||
+			OnCollisionRectToRect(rect_collider, *friend_left_) == true || OnCollisionRectToRect(rect_collider, *friend_right_) == true)	//当たっている
+		{
+			canTouch = true;	//タッチ
+		}
+		else
+		{
+			canTouch = false;	//タッチしていない
+		}
 	}
 }
+
+bool Enemy::TouchFriend(bool isActive_)
+{
+	if (isActive_ == true)
+	{
+		if (canTouch == true)
+		{
+			return true;
+		}
+		return false;
+	}
+	return false;
+	}
 
 void Enemy::Draw()
 {

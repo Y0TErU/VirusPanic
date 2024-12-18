@@ -10,7 +10,6 @@ extern SceneStep g_CurrentSceneStep;
 
 Button textStart;
 
-
 void ExecuteTitleScene()
 {
 	switch (g_CurrentSceneStep)
@@ -34,6 +33,7 @@ void InitializeTitleScene()
 	SetBackgroundColor(255, 233, 207);		//背景色変更
 
 	int start_text_handle = LoadGraph("Res/Text/start_write.png");
+
 
 	SetMouseDispFlag(TRUE);	//マウスを表示
 

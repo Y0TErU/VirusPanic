@@ -21,9 +21,6 @@ Timer timer;
 
 Stage stage;
 
-
-int g_count = 0;
-
 int friend_Counter;
 
 void ExecuteGameScene()
@@ -46,8 +43,9 @@ void ExecuteGameScene()
 
 void InitializeGameScene()
 {	
+	SetBackgroundColor(255, 233, 207);		//背景色変更
+
 	//初期化処理
-	g_count = 0;
 	friend_Counter = 0;
 
 	vaccine.Initialize();
@@ -83,7 +81,7 @@ void UpdateGameScene()
 {
 
 	//生成処理
-	if (g_count == 0)	//初期生成
+	if (timer.GetCurrentCounter() == 0)	//初期生成
 	{
 		for (int i = 0; i < EnemyMaxNum; i++)
 		{
@@ -97,22 +95,13 @@ void UpdateGameScene()
 		}
 	}
 	
-	if (g_count % 180 == 0 && g_count != 0)
+	if (timer.GetCurrentCounter() % 960 == 0 && timer.GetCurrentCounter() != 0)
 	{
 		friend_Counter++;
 		whiteBloodCell[friend_Counter].Create();
 		
 	}
-	/*
-	if (g_count % 960 == 0 && g_count != 0)
-	{
-		for (int i = 0; i < FriendMaxNum; i++)
-		{
-			whiteBloodCell[i].Create();
-			break;
-		}
-	}
-	*/
+	
 	
 	//更新処理
 	timer.Update();
@@ -130,7 +119,6 @@ void UpdateGameScene()
 		else
 		{
 			virus[i].Update(&whiteBloodCell[i]);
-			virus[i].ToFriend(&whiteBloodCell[i]);
 		}
 		
 	}
@@ -142,10 +130,18 @@ void UpdateGameScene()
 		{
 			whiteBloodCell[i].SetIsActive(false);
 		}
+		for (int j = 0; j < EnemyMaxNum; j++)
+		{
+			virus[j].ToFriend(whiteBloodCell[i].GetCurrentState(), whiteBloodCell[i].GetTopCollider(), whiteBloodCell[i].GetBotomCollider(),
+				whiteBloodCell[i].GetLeftCollider(), whiteBloodCell[i].GetRightCollider());
+			if (virus[j].TouchFriend(whiteBloodCell[i].GetIsActive()) == true && whiteBloodCell[i].GetCurrentState() == true)
+			{
+				whiteBloodCell[i].SetIsActive(false);
+			}
+		}
+		
 	}
 
-	//時間計測用
-	g_count++;
 
 	//描画処理
 	ClearDrawScreen();
@@ -167,14 +163,14 @@ void UpdateGameScene()
 
 	ScreenFlip();
 	
-	if (vaccine.GetIsActive() == false)
+	if (vaccine.GetIsActive() == false || CheckHitKey(KEY_INPUT_RETURN))
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = over;
 	}
 	
 	
-	if (timer.GetCurrentSecond() == 180)
+	if (timer.GetCurrentCounter() == 10800 || CheckHitKey(KEY_INPUT_TAB))
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = clear;

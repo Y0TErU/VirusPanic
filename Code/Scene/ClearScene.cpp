@@ -34,11 +34,10 @@ void InitializeClearScene()
 {
 	SetBackgroundColor(255, 255, 255);
 	
-	int clear_text_handle = LoadGraph("Res/Ui/Item2.png");
-	g_handle = LoadGraph("Res/Ui/ClearBackGround.png");
+	int handle_Clear = LoadGraph("Res/Text/returntitle_write.png");
 
 	SetMouseDispFlag(TRUE);	//マウスを表示
-	textClear.LoadTexture(clear_text_handle);
+	textClear.LoadTexture(handle_Clear);
 
 	g_CurrentSceneStep = update;
 }
