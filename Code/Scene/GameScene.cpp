@@ -5,6 +5,7 @@
 #include "../Object/Player.h"
 #include "../Object/Friend.h"
 #include "../Object/Stage.h"
+#include "../Object/Timer.h"
 
 #include <Dxlib.h>
 #include <math.h>
@@ -16,11 +17,10 @@ extern int g_nextScene;
 Player vaccine;
 Enemy virus[EnemyMaxNum];
 Friend whiteBloodCell[FriendMaxNum];
+Timer timer;
 
 Stage stage;
 
-int g_time_handle = -1;
-int g_clock_handle = -1;
 
 int g_count = 0;
 
@@ -45,25 +45,13 @@ void ExecuteGameScene()
 }
 
 void InitializeGameScene()
-{
-	//画像読み込み処理
-	
-	vaccine.LoadTexture();
-
-	for (int i = 0; i < EnemyMaxNum; i++)
-	{
-		virus[i].LoadTexture();
-	}
-	for (int i = 0; i < FriendMaxNum; i++)
-	{
-		whiteBloodCell[i].LoadTexture();
-	}
-	
+{	
 	//初期化処理
 	g_count = 0;
 	friend_Counter = 0;
 
 	vaccine.Initialize();
+	timer.Initialize();
 
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
@@ -75,8 +63,18 @@ void InitializeGameScene()
 	}
 	
 	//描画の読み込み
-	g_time_handle = LoadGraph("Res/Digit01.png");
-	g_clock_handle = LoadGraph("Res/Icon_Clock.png");
+	vaccine.LoadTexture();
+	vaccine.LoadUiTexture();
+	timer.Load();
+
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		virus[i].LoadTexture();
+	}
+	for (int i = 0; i < FriendMaxNum; i++)
+	{
+		whiteBloodCell[i].LoadTexture();
+	}
 
 	g_CurrentSceneStep = update;
 }
@@ -117,7 +115,11 @@ void UpdateGameScene()
 	*/
 	
 	//更新処理
+	timer.Update();
+
 	vaccine.Update();
+	
+	ChangeStateFriend(whiteBloodCell);
 
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
@@ -134,7 +136,12 @@ void UpdateGameScene()
 	}
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
-		whiteBloodCell[i].Update();
+		vaccine.ToFriend(whiteBloodCell[i].GetCurrentState(), whiteBloodCell[i].GetTopCollider(), whiteBloodCell[i].GetBotomCollider(),
+			whiteBloodCell[i].GetLeftCollider(), whiteBloodCell[i].GetRightCollider());
+		if (vaccine.TouchFriend(whiteBloodCell[i].GetIsActive()) == true && whiteBloodCell[i].GetCurrentState() == true)
+		{
+			whiteBloodCell[i].SetIsActive(false);
+		}
 	}
 
 	//時間計測用
@@ -145,18 +152,18 @@ void UpdateGameScene()
 
 	stage.Draw();
 	vaccine.Draw();
+	vaccine.DrawSpaceKey();
 
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
 		virus[i].Draw();
 	}
-	for (int i = 0; i <= FriendMaxNum; i++)
+	for (int i = 0; i < FriendMaxNum; i++)
 	{
 		whiteBloodCell[i].Draw();
 	}
 
-	//DrawGraph(200,0,g_time_handle,true);
-	//DrawGraph(0,0, g_clock_handle,true);
+	timer.Draw();
 
 	ScreenFlip();
 	
@@ -167,7 +174,7 @@ void UpdateGameScene()
 	}
 	
 	
-	if (CheckHitKey(KEY_INPUT_RETURN))
+	if (timer.GetCurrentSecond() == 180)
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = clear;
@@ -179,6 +186,8 @@ void UpdateGameScene()
 void TerminateGameScene()
 {
 	vaccine.Delete();
+	vaccine.DeleteSpaceKey();
+	timer.Delete();
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
 		virus[i].Delete();
@@ -188,14 +197,13 @@ void TerminateGameScene()
 		whiteBloodCell[i].Delete();
 	}
 	
-	DeleteGraph(g_time_handle);
 
 	if (g_nextScene == clear)
 	{
 		g_CurrentSceneStep = init;
 		g_CurrentSceneType = clear;
 	}
-	if (g_nextScene == over)
+	else if (g_nextScene == over)
 	{
 		g_CurrentSceneStep = init;
 		g_CurrentSceneType = over;

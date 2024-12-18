@@ -15,6 +15,11 @@ void Friend::Initialize()
 	width = 96;
 	currentState = false;
 	timeCount = 0;
+	rect_collider = 
+	{
+		posX, posY,
+		width, height
+	};
 }
 
 void Friend::Create()
@@ -22,12 +27,31 @@ void Friend::Create()
 	if (isActive == false)
 	{
 		FriendToStage.GetRandomStage();
-		posX = (float)FriendToStage.GetStagePosX();
-		posY = (float)FriendToStage.GetStagePosY();
+		posX = static_cast<int>(FriendToStage.GetStagePosX());
+		posY = static_cast<int>(FriendToStage.GetStagePosY());
 		isActive = true;
+
+		top_collider =
+		{
+			posX,posY - height,
+			width,height
+		};
+		botom_collider =
+		{
+			posX,posY + height,
+			width,height
+		};
+		left_collider =
+		{
+			posX - width,posY,
+			width,height
+		};
+		right_collider =
+		{
+			posX + width,posY,
+			width,height
+		};
 	}
-	
-	
 }
 
 void Friend::Update()
@@ -43,7 +67,6 @@ void Friend::Update()
 			}
 		}
 	}
-	
 }
 
 void Friend::LoadTexture()
@@ -56,10 +79,17 @@ void Friend::LoadTexture()
 
 void Friend::Draw()
 {
-	
 	if (isActive == true)
 	{
-		DrawExtendGraph((int)posX, (int)posY, posX + width, posY + height, handle_front, true);
+		if (currentState == false)
+		{
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_front, true);
+		}
+		else
+		{
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width) +10, static_cast<int>(posY + height) + 10, handle_front, true);
+
+		}
 	}
 	
 }
@@ -72,13 +102,36 @@ void InitializeFriend(ObjBase* friend_)
 		friend_->Initialize();
 	}
 }
-*/
-
 void CreateFriends(Friend* friend_[FriendMaxNum])
 {
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
 		friend_[i]->Create();
+	}
+}
+*/
+
+void ChangeStateFriend(Friend* friend_)
+{
+	static int count = 0;	
+
+	for (int i = 0; i < FriendMaxNum; i++)
+	{
+		if (friend_[i].GetIsActive() == true)
+		{
+			if (friend_[i].GetCurrentState() == false)
+			{
+				if (friend_[i - 1].GetCurrentState() == true)
+				{
+					break;
+				}
+
+				friend_[i].Update();
+
+			}
+		break;
+		}
+		
 	}
 }
 

@@ -33,10 +33,11 @@ void InitializeTitleScene()
 {
 	SetBackgroundColor(255, 233, 207);		//背景色変更
 
-	int start_text_handle = LoadGraph("Res/Ui/Item2.png");
+	int start_text_handle = LoadGraph("Res/Text/start_write.png");
 
 	SetMouseDispFlag(TRUE);	//マウスを表示
-	
+
+	textStart.Initialize();
 	textStart.LoadTexture(start_text_handle);
 
 	g_CurrentSceneStep = update;

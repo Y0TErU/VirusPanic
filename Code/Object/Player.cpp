@@ -17,6 +17,14 @@ void Player::Initialize()
 		posX,posY,
 		width,height
 	};
+	canTouch = false;
+	//テクスチャハンドル
+	handle_front = -1;
+	handle_left = -1;
+	handle_right = -1;
+	handle_back = -1;
+	//UIハンドル
+	handle_space = -1;
 }
 
 void Player::LoadTexture()
@@ -36,6 +44,14 @@ void Player::LoadTexture()
 	if (handle_back == -1)
 	{
 		handle_back = LoadGraph("Res/Object/vaccine_back.png");
+	}
+}
+
+void Player::LoadUiTexture()
+{
+	if (handle_space == -1)
+	{
+		handle_space = LoadGraph("Res/Ui/Ui_space.png");
 	}
 }
 
@@ -111,8 +127,38 @@ void Player::Update()
 			rect_collider.posY = posY;
 		}
 	}
-	
 }
+
+void Player::ToFriend(bool isTouch_, RectCollider *friend_top_, RectCollider *friend_botom_, RectCollider *friend_left_, RectCollider *friend_right_)
+{
+	if (isTouch_ == true)
+	{
+		//上1マスの判定
+		if (OnCollisionRectToRect(rect_collider, *friend_top_) == true || OnCollisionRectToRect(rect_collider, *friend_botom_) == true ||
+			OnCollisionRectToRect(rect_collider, *friend_left_) == true || OnCollisionRectToRect(rect_collider, *friend_right_) == true)	//当たっている
+		{
+			canTouch = true;	//タッチ可能
+		}
+		else
+		{
+			canTouch = false;	//タッチ不可
+		}
+	}
+}
+
+bool Player::TouchFriend(bool isActive_)
+{
+	if (isActive_ == true)
+	{
+		if (canTouch == true && CheckHitKey(KEY_INPUT_SPACE))
+		{
+			return true;
+		}
+		return false;
+	}
+	return false;
+}
+
 
 void Player::Draw()
 {
@@ -139,4 +185,17 @@ void Player::Draw()
 			DrawExtendGraph(posX, posY - 65, posX + 75, posY - 65 + 125, handle_left, true);	//左を向いている
 		}
 	}
+}
+
+void Player::DrawSpaceKey()
+{
+	if (canTouch == true)
+	{
+		DrawGraph(posX, posY, handle_space, true);
+	}
+}
+
+void Player::DeleteSpaceKey()
+{
+	DeleteGraph(handle_space);
 }

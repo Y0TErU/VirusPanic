@@ -8,6 +8,11 @@ void Button::LoadTexture(int handle_)
 	handle = handle_;
 }
 
+void Button::Initialize()
+{
+	mouseClick = false;
+}
+
 void Button::Update(int pos_x_, int pos_y_, int width_, int height_)
 {
 	mouseClick = false;

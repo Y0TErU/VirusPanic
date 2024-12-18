@@ -5,6 +5,7 @@
 class Button
 {
 public:
+	void Initialize();
 	void LoadTexture(int handle_);
 	void Update(int pos_x_, int pos_y_, int width_, int height_);
 	void Draw();

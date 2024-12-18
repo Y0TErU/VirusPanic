@@ -18,7 +18,7 @@ void Stage::Draw()
 			{
 				DrawBox(posX,posY,posX + blockSize,posY + blockSize, GetColor(215, 0, 0), true);
 			}
-			if (stageArrange[i][j] == 1 || stageArrange[i][j] == 2)
+			else
 			{
 				DrawBox(posX,posY,posX + blockSize,posY + blockSize, GetColor(250, 200, 170), true);
 			}
