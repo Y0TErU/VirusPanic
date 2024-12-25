@@ -25,11 +25,14 @@ private:
 	float vecY{ 0.0f };
 	float enemyCounter{ 0 };
 	bool canTouch{ false };
-	
+
 	ObjBase* target{ nullptr };	//í«ê’êÊ
 
 };
 
-void InitializeEnemies(Enemy* enemy_[EnemyMaxNum]);
-void CreateEnemies(Enemy* enemy_[EnemyMaxNum], int pos_x_, int pos_y_);
+void InitializeEnemies(Enemy* enemy_);
+void CreateEnemies(Enemy* enemy_);
+void UpdateEnemies(Enemy* enemy_, ObjBase* target_);
+bool EnemyToEnemy(Enemy* enemy_);
+
 

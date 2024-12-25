@@ -12,6 +12,7 @@ void Player::Initialize()
 	posY = 200;
 	speed = 4.0f;
 	isActive = true;
+	currentState = true;
 	rect_collider =
 	{
 		posX,posY,
@@ -129,9 +130,9 @@ void Player::Update()
 	}
 }
 
-void Player::ToFriend(bool isTouch_, RectCollider *friend_top_, RectCollider *friend_botom_, RectCollider *friend_left_, RectCollider *friend_right_)
+void Player::ToFriend(bool isActive_,bool isTouch_, RectCollider *friend_top_, RectCollider *friend_botom_, RectCollider *friend_left_, RectCollider *friend_right_)
 {
-	if (isTouch_ == true)
+	if (isTouch_ == true && isActive_ == true)
 	{
 		//è„1É}ÉXÇÃîªíË
 		if (OnCollisionRectToRect(rect_collider, *friend_top_) == true || OnCollisionRectToRect(rect_collider, *friend_botom_) == true ||
@@ -146,12 +147,13 @@ void Player::ToFriend(bool isTouch_, RectCollider *friend_top_, RectCollider *fr
 	}
 }
 
-bool Player::TouchFriend(bool isActive_)
+bool Player::TouchFriend(bool isActive_,bool tired_)
 {
-	if (isActive_ == true)
+	if (isActive_ == true && tired_ == true)
 	{
 		if (canTouch == true && CheckHitKey(KEY_INPUT_SPACE))
 		{
+			canTouch = false;
 			return true;
 		}
 		return false;

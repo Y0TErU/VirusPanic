@@ -16,8 +16,8 @@ public:
 	void DeleteSpaceKey();
 
 	//”’ŒŒ‹…‚Æ‚Ì”»’è—p
-	void ToFriend(bool isTouch_, RectCollider* friend_top_, RectCollider* friend_botom_, RectCollider* friend_left_, RectCollider* friend_right_);
-	bool TouchFriend(bool isActive_);
+	void ToFriend(bool isActive_, bool isTouch_, RectCollider* friend_top_, RectCollider* friend_botom_, RectCollider* friend_left_, RectCollider* friend_right_);
+	bool TouchFriend(bool isActive_, bool tired_);
 
 private:
 	int nextPosX{ posX };

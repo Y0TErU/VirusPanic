@@ -21,7 +21,6 @@ Timer timer;
 
 Stage stage;
 
-int friend_Counter;
 
 void ExecuteGameScene()
 {
@@ -45,20 +44,10 @@ void InitializeGameScene()
 {	
 	SetBackgroundColor(255, 233, 207);		//背景色変更
 
-	//初期化処理
-	friend_Counter = 0;
-
 	vaccine.Initialize();
 	timer.Initialize();
-
-	for (int i = 0; i < EnemyMaxNum; i++)
-	{
-		virus[i].Initialize();
-	}
-	for (int i = 0; i < FriendMaxNum; i++)
-	{
-		whiteBloodCell[i].Initialize();
-	}
+	InitializeEnemies(virus);
+	InitializeFriends(whiteBloodCell);
 	
 	//描画の読み込み
 	vaccine.LoadTexture();
@@ -79,54 +68,24 @@ void InitializeGameScene()
 
 void UpdateGameScene()
 {
-
 	//生成処理
-	if (timer.GetCurrentCounter() == 0)	//初期生成
+	if (timer.GetCurrentSecontd() == 0)	//初期生成
 	{
-		for (int i = 0; i < EnemyMaxNum; i++)
-		{
-			virus[i].Create((int)virus->GetPosX(), (int)virus->GetPosY());
-			break;
-		}
-		for (int i = 0; i < initialFriendNum; i++)
-		{
-			whiteBloodCell[i].Create();
-			friend_Counter = i;
-		}
+		CreateEnemies(virus);
+		CrateFriends(whiteBloodCell,5);
 	}
 	
-	if (timer.GetCurrentCounter() % 960 == 0 && timer.GetCurrentCounter() != 0)
+	if (timer.GetCurrentSecontd() % 16 == 0 && timer.GetCurrentSecontd() != 0)
 	{
-		friend_Counter++;
-		whiteBloodCell[friend_Counter].Create();
-		
+		CrateFriends(whiteBloodCell,1);		//16秒ごとに生成する
 	}
 	
-	
-	//更新処理
-	timer.Update();
-
-	vaccine.Update();
-	
-	ChangeStateFriend(whiteBloodCell);
-
-	for (int i = 0; i < EnemyMaxNum; i++)
-	{
-		if (whiteBloodCell[i].GetCurrentState() == false)
-		{
-			virus[i].Update(&vaccine);
-		}
-		else
-		{
-			virus[i].Update(&whiteBloodCell[i]);
-		}
-		
-	}
+	//Enemy、Playerと白血球の当たり判定
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
-		vaccine.ToFriend(whiteBloodCell[i].GetCurrentState(), whiteBloodCell[i].GetTopCollider(), whiteBloodCell[i].GetBotomCollider(),
+		vaccine.ToFriend(whiteBloodCell[i].GetIsActive(),whiteBloodCell[i].GetCurrentState(), whiteBloodCell[i].GetTopCollider(), whiteBloodCell[i].GetBotomCollider(),
 			whiteBloodCell[i].GetLeftCollider(), whiteBloodCell[i].GetRightCollider());
-		if (vaccine.TouchFriend(whiteBloodCell[i].GetIsActive()) == true && whiteBloodCell[i].GetCurrentState() == true)
+		if (vaccine.TouchFriend(whiteBloodCell[i].GetIsActive(), whiteBloodCell[i].GetCurrentState()) == true)
 		{
 			whiteBloodCell[i].SetIsActive(false);
 		}
@@ -137,29 +96,62 @@ void UpdateGameScene()
 			if (virus[j].TouchFriend(whiteBloodCell[i].GetIsActive()) == true && whiteBloodCell[i].GetCurrentState() == true)
 			{
 				whiteBloodCell[i].SetIsActive(false);
+				while (true)
+				{
+					if (virus[j].GetIsActive() == false)
+					{
+						virus[j].Create(whiteBloodCell[i].GetPosX(), whiteBloodCell[i].GetPosY());
+						break;
+					}
+					
+					j++;
+				}
 			}
 		}
-		
 	}
+	
+	//更新処理
+	timer.Update();	//時間の更新
+	vaccine.Update();	//プレイヤーの更新
 
-
+	//白血球の更新処理
+	ChangeStateFriend(whiteBloodCell);
+	UpdateFriends(whiteBloodCell);
+	EraseFriend(whiteBloodCell);
+	
+	//updateの中でマス分の白血球をチェック
+	if (whiteBloodCell[SearchTiredFriend(whiteBloodCell)].GetCurrentState() == true)
+	{
+		if (EnemyToEnemy(virus) == true)
+		{
+			UpdateEnemies(virus, &whiteBloodCell[SearchTiredFriend(whiteBloodCell)]);
+		}
+	}
+	else	//いたらターゲットの変更
+	{
+		if (EnemyToEnemy(virus) == true)
+		{
+			UpdateEnemies(virus, &vaccine);
+		}
+	}
+	
 	//描画処理
 	ClearDrawScreen();
 
-	stage.Draw();
-	vaccine.Draw();
-	vaccine.DrawSpaceKey();
+	stage.Draw();		//ステージ
+	vaccine.Draw();		//ワクチン
+	vaccine.DrawSpaceKey();	//スペースキー
 
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
-		virus[i].Draw();
+		virus[i].Draw();	//ウイルス
 	}
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
-		whiteBloodCell[i].Draw();
+		whiteBloodCell[i].Draw();	//白血球
 	}
 
-	timer.Draw();
+	timer.Draw();	//時間
 
 	ScreenFlip();
 	
@@ -169,8 +161,7 @@ void UpdateGameScene()
 		g_nextScene = over;
 	}
 	
-	
-	if (timer.GetCurrentCounter() == 10800 || CheckHitKey(KEY_INPUT_TAB))
+	if (timer.GetCurrentSecontd() == 180 || CheckHitKey(KEY_INPUT_TAB))
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = clear;
@@ -192,7 +183,6 @@ void TerminateGameScene()
 	{
 		whiteBloodCell[i].Delete();
 	}
-	
 
 	if (g_nextScene == clear)
 	{

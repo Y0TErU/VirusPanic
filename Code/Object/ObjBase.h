@@ -16,6 +16,7 @@ public:
 		height = 0;			//縦幅
 		speed = 0.0f;		//速度
 		isActive = false;	//生存フラグ	
+		currentState = false;	//friendのみで使用(疲れている状況かどうか)
 		handle_front = -1;	//正面の画像
 		handle_left = -1;	//横の画像
 		handle_right = -1;	//横の画像
@@ -52,6 +53,10 @@ public:
 	{
 		return isActive;
 	}
+	bool GetCurrentState()
+	{
+		return currentState;
+	}
 
 	RectCollider* GetCollider()
 	{
@@ -79,6 +84,7 @@ protected:
 	int height;
 	float speed;		//速度
 	bool isActive;		//生存フラグ
+	bool currentState;	//疲れているかどうか （falseは元気状態、trueは疲れている）
 
 	RectCollider rect_collider;	//当たり判定用	
 

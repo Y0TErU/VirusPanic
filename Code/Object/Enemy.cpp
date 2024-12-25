@@ -57,8 +57,6 @@ void Enemy::LoadTexture()
 
 void Enemy::Update(ObjBase* target_)
 {
-	target = target_;	//’ÇÕ‘ÎÛ‚ÌƒAƒhƒŒƒX
-
 	if (isActive == true)
 	{
 		nextPosX = posX;
@@ -67,8 +65,8 @@ void Enemy::Update(ObjBase* target_)
 		vecX = 0.0f;
 		vecY = 0.0f;
 
-		vecX = target->GetPosX() - posX;
-		vecY = target->GetPosY() - posY;
+		vecX = target_->GetPosX() - posX;
+		vecY = target_->GetPosY() - posY;
 
 		float length = sqrtf(vecX * vecX + vecY * vecY);
 
@@ -153,7 +151,8 @@ bool Enemy::TouchFriend(bool isActive_)
 		return false;
 	}
 	return false;
-	}
+
+}
 
 void Enemy::Draw()
 {
@@ -179,27 +178,53 @@ void Enemy::Draw()
 }
 
 
-void InitializeEnemies(Enemy* enemy_[EnemyMaxNum])
+
+void InitializeEnemies(Enemy* enemy_)
 {
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
-		if (enemy_[i]->GetIsActive() == true)
+		if (enemy_[i].GetIsActive() == false)
 		{
-			enemy_[i]->Initialize();
+			enemy_[i].Initialize();
 		}
 	}
 }
 
-void CreateEnemies(Enemy* enemy_[EnemyMaxNum], int pos_x_, int pos_y_)
+void CreateEnemies(Enemy* enemy_)
 {
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
-		if (enemy_[i]->GetIsActive() == false)
+		if (enemy_[i].GetIsActive() == false)
 		{
-			enemy_[i]->Create(pos_x_,pos_y_);
+			enemy_[i].Create(enemy_->GetPosX(),enemy_->GetPosY());
+			break;
 		}
-
-		break;
 	}
+}
 
+void UpdateEnemies(Enemy* enemy_, ObjBase* target_)
+{
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		enemy_[i].Update(target_);
+	}
+}
+
+bool EnemyToEnemy(Enemy* enemy_)
+{
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		for (int j = 0; j < EnemyMaxNum; j++)
+		{
+			if (OnCollisionRectToRect(*enemy_[i].GetCollider(), *enemy_[j].GetCollider()) == true)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+
+			}
+		}
+	}
 }

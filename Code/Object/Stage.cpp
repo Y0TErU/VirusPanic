@@ -4,7 +4,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-
 void Stage::Draw()
 {
 	for (int i = 0; i < mapHeight; i++)
@@ -25,7 +24,6 @@ void Stage::Draw()
 		}
 	}
 }
-
 
 bool Stage::OnCollisionStageToRect(int min_x_, int max_x_, int min_y_, int max_y_, 
 	float vec_x_, float vec_y_, float* side_x_, float* side_y_)
@@ -117,13 +115,12 @@ void Stage::GetRandomStage()
 
 	while (true)
 	{
-
 		vertical = rand() % 11;
 		beside = rand() % 19;
 
 		if (stageArrange[vertical][beside] == 1)
 		{
-			stageArrange[vertical][beside] == 2;
+			stageArrange[vertical][beside] = 2;
 			getPosX = mapOffSetX + blockSize * beside;
 			getPosY = mapOffSetY + blockSize * vertical;
 			break;
