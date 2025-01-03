@@ -36,11 +36,12 @@ void InitializeOverScene()
 
 	int title_text_handle = LoadGraph("Res/Text/returntitle_write.png");
 	int replay_text_handle = LoadGraph("Res/Text/onemoreplay_write.png");
+	int bitton_handle = LoadGraph("Res/Button/Start.png");
 
 	SetMouseDispFlag(TRUE);	//マウスを表示
 
-	textTitle.LoadTexture(title_text_handle);
-	textReplay.LoadTexture(replay_text_handle);
+	textTitle.LoadTexture(bitton_handle, title_text_handle);
+	textReplay.LoadTexture(bitton_handle, replay_text_handle);
 
 	textTitle.Initialize();
 	textReplay.Initialize();

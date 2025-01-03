@@ -4,7 +4,7 @@
 
 const int blockSize{ 96 };		//ステージ一マスのサイズ
 const int mapHeight{ 11 };		//ステージの縦列
-const int mapwidth{ 19 };		//ステージの横列
+const int mapWidth{ 19 };		//ステージの横列
 const int mapOffSetX{ 48 };		//ステージのオフセットX	48
 const int mapOffSetY{ 12 };		//ステージのオフセットY	12
 
@@ -29,13 +29,13 @@ private:
 	int posY{ 0 };
 	int getPosX{ 0 };
 	int getPosY{ 0 };
-	int stageArrange[mapHeight][mapwidth]	//ステージの配置
+	int stageArrange[mapHeight][mapWidth]	//ステージの配置
 	{
 		/*
 			0：移動可能マス
 			1：壁(白血球生成可能マス)
 			2：壁(白血球がいるマス)
-			3：外壁
+			3：外壁　…　余裕があれば Playerと時計
 		*/
 		{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},		//1列
 		{ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3},		//2列

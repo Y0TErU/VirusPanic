@@ -44,6 +44,9 @@ void InitializeGameScene()
 {	
 	SetBackgroundColor(255, 233, 207);		//背景色変更
 
+	SetMouseDispFlag(TRUE);	//マウスを表示
+
+
 	vaccine.Initialize();
 	timer.Initialize();
 	InitializeEnemies(virus);
@@ -69,17 +72,18 @@ void InitializeGameScene()
 void UpdateGameScene()
 {
 	//生成処理
-	if (timer.GetCurrentSecontd() == 0)	//初期生成
+	if (timer.GetCurrentCounter() == 0)	//初期生成
 	{
 		CreateEnemies(virus);
 		CrateFriends(whiteBloodCell,5);
 	}
 	
-	if (timer.GetCurrentSecontd() % 16 == 0 && timer.GetCurrentSecontd() != 0)
+	if (timer.GetCurrentCounter() % 960 == 0 && timer.GetCurrentCounter() != 0)
 	{
 		CrateFriends(whiteBloodCell,1);		//16秒ごとに生成する
 	}
 	
+	//以下をもっときれいにする -------------------------------------------------------------------------
 	//Enemy、Playerと白血球の当たり判定
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
@@ -103,12 +107,19 @@ void UpdateGameScene()
 						virus[j].Create(whiteBloodCell[i].GetPosX(), whiteBloodCell[i].GetPosY());
 						break;
 					}
-					
 					j++;
 				}
 			}
 		}
 	}
+
+	//PlayerとEnemyの当たり
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		virus[i].ToPlayer(&vaccine);
+	}
+	
+
 	
 	//更新処理
 	timer.Update();	//時間の更新
@@ -139,8 +150,6 @@ void UpdateGameScene()
 	ClearDrawScreen();
 
 	stage.Draw();		//ステージ
-	vaccine.Draw();		//ワクチン
-	vaccine.DrawSpaceKey();	//スペースキー
 
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
@@ -151,7 +160,13 @@ void UpdateGameScene()
 		whiteBloodCell[i].Draw();	//白血球
 	}
 
+	vaccine.DrawSpaceKey(&whiteBloodCell[SearchTiredFriend(whiteBloodCell)]);	//スペースキー
+
+	vaccine.Draw();		//ワクチン
+
 	timer.Draw();	//時間
+
+	PlayAnimation(whiteBloodCell);
 
 	ScreenFlip();
 	
@@ -161,13 +176,11 @@ void UpdateGameScene()
 		g_nextScene = over;
 	}
 	
-	if (timer.GetCurrentSecontd() == 180 || CheckHitKey(KEY_INPUT_TAB))
+	if (timer.GetCurrentCounter() == 10800 || CheckHitKey(KEY_INPUT_TAB))
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = clear;
 	}
-	
-	
 }
 
 void TerminateGameScene()

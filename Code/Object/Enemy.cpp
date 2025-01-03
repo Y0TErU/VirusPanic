@@ -15,6 +15,7 @@ void Enemy::Initialize()
 	height = 75;
 	width = 90;
 	enemyCounter = 0;
+	canTouch = false;
 	rect_collider =
 	{
 		posX,posY,
@@ -59,23 +60,36 @@ void Enemy::Update(ObjBase* target_)
 {
 	if (isActive == true)
 	{
+		int targetPosX = target_->GetPosX();
+		int targetPosY = target_->GetPosY();
+
 		nextPosX = posX;
 		nextPosY = posY;
 
 		vecX = 0.0f;
 		vecY = 0.0f;
 
-		vecX = target_->GetPosX() - posX;
-		vecY = target_->GetPosY() - posY;
+		vecX = targetPosX - posX;
+		vecY = targetPosY - posY;
 
 		float length = sqrtf(vecX * vecX + vecY * vecY);
 
-		nextPosX += vecX / length * speed;
-		nextPosY += vecY / length * speed;
+		if (length != 0)
+		{
+			vecX /= length;
+			vecY /= length;
+		}
+
+		vecX *= speed;
+		vecY *= speed;
+
+		nextPosX += vecX;
+		nextPosY += vecY;
 
  		float side = 0.0f;
-		rect_collider.posX = nextPosX;
 
+		//X²‚Ì•Ç‚Æ‚ÌÚG”»’è			•Ç‚Éˆø‚Á‚©‚©‚éˆ—‚ÌC³c’ú‚ß
+		rect_collider.posX = nextPosX;
 		if (enemyToStage.OnCollisionStageAndRect(rect_collider, vecX, 0.0f, &side, nullptr) == false)
 		{
 			posX = nextPosX;
@@ -93,6 +107,7 @@ void Enemy::Update(ObjBase* target_)
 			rect_collider.posX = posX;
 		}
 
+		//Y²‚Ì•Ç‚Æ‚ÌÚG”»’è
 		rect_collider.posY = nextPosY;
 		if (enemyToStage.OnCollisionStageAndRect(rect_collider, 0.0f, vecY, nullptr, &side) == false)
 		{
@@ -108,9 +123,7 @@ void Enemy::Update(ObjBase* target_)
 			{
 				posY = side + 1.0f;
 			}
-			posX = nextPosX;
 			rect_collider.posY = posY;
-			
 		}
 	}
 }
@@ -183,10 +196,7 @@ void InitializeEnemies(Enemy* enemy_)
 {
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
-		if (enemy_[i].GetIsActive() == false)
-		{
-			enemy_[i].Initialize();
-		}
+		enemy_[i].Initialize();
 	}
 }
 

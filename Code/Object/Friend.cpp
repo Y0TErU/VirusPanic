@@ -1,5 +1,6 @@
 #include <Dxlib.h>
 #include <math.h>
+#include <time.h>
 #include <stdlib.h>
 
 #include "Friend.h"
@@ -12,12 +13,14 @@ void Friend::Initialize()
 	posX = 0;
 	posY = 0;
 	isActive = false;
+	beforeIsActive = false;
 	height = 96;
 	width = 96;
 	currentState = false;
 	timeCount = 0;
 	canUpdate = false;
-	
+	beforeIsActive = false;
+
 	handle_front = -1;
 	handle_tired = -1;
 }
@@ -28,6 +31,7 @@ void Friend::Create()
 	posX = static_cast<int>(FriendToStage.GetStagePosX());
 	posY = static_cast<int>(FriendToStage.GetStagePosY());
 	isActive = true;
+	beforeIsActive = true;
 	currentState = false;
 
 	top_collider =
@@ -66,16 +70,34 @@ void Friend::Update()
 	}
 }
 
+void Friend::Erace()
+{
+	if (isActive == false && beforeIsActive == true)
+	{
+		posX = 0;
+		posY = 0;
+		isActive = false;
+		beforeIsActive = false;
+		height = 96;
+		width = 96;
+		currentState = false;
+		timeCount = 0;
+		canUpdate = false;
+	}
+}
+
 void Friend::LoadTexture()
 {
-	if (handle_front == -1)
-	{
-		handle_front = LoadGraph("Res/Object/WhiteBloodCell.png");
-	}
-	if (handle_tired == -1)
-	{
-		handle_tired = LoadGraph("Res/Object/WhiteBloodCell_tired.png");
-	}
+	handle_front = LoadGraph("Res/Object/WhiteBloodCell.png");
+	handle_tired = LoadGraph("Res/Object/WhiteBloodCell_tired.png");
+	
+	handle_animation[0] = LoadGraph("Res/Animation/smoke1.png");
+	handle_animation[1] = LoadGraph("Res/Animation/smoke2.png");
+	handle_animation[2] = LoadGraph("Res/Animation/smoke3.png");
+	handle_animation[3] = LoadGraph("Res/Animation/smoke4.png");
+	handle_animation[4] = LoadGraph("Res/Animation/smoke5.png");
+	handle_animation[5] = LoadGraph("Res/Animation/smoke6.png");
+	
 }
 
 void Friend::Draw()
@@ -93,6 +115,16 @@ void Friend::Draw()
 	}
 }
 
+void Friend::PlayAnim()
+{
+	if (beforeIsActive == true && isActive == false)
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_animation[i], true);
+		}
+	}
+}
 
 void ChangeStateFriend(Friend* friend_)
 {
@@ -105,9 +137,11 @@ void ChangeStateFriend(Friend* friend_)
 		}
 	}
 
+	srand((unsigned int)time(NULL));
+
 	while (true)
 	{
-		int make = rand() % FriendMaxNum + 1;
+		int make = rand() % FriendMaxNum;
 		if (friend_[make].GetIsActive() == true && friend_[make].GetCanUpdate() == false)
 		{
 			friend_[make].SetCanUpdate(true);
@@ -116,14 +150,11 @@ void ChangeStateFriend(Friend* friend_)
 	}
 }
 
-void InitializeFriends(Friend friend_[FriendMaxNum])
+void InitializeFriends(Friend* friend_)
 {
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
-		if (friend_[i].GetIsActive() == true)
-		{
-			friend_[i].Initialize();
-		}
+		friend_[i].Initialize();
 	}
 }
 
@@ -160,7 +191,7 @@ void EraseFriend(Friend* friend_)
 	{
 		if (friend_[i].GetIsActive() == false)
 		{
-			friend_[i].Initialize();
+			friend_[i].Erace();
 		}
 	}
 }
@@ -173,5 +204,13 @@ int SearchTiredFriend(Friend* friend_)
 		{
 			return i;
 		}
+	}
+}
+
+void PlayAnimation(Friend* friend_)
+{
+	for (int i = 0; i < FriendMaxNum; i++)
+	{
+		friend_[i].PlayAnim();
 	}
 }

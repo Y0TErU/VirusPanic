@@ -3,12 +3,13 @@
 #include <Dxlib.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
 
 void Stage::Draw()
 {
 	for (int i = 0; i < mapHeight; i++)
 	{
-		for (int j = 0; j < mapwidth; j++)
+		for (int j = 0; j < mapWidth; j++)
 		{
 			posX = j * blockSize + mapOffSetX;
 			posY = i * blockSize + mapOffSetY;
@@ -17,7 +18,7 @@ void Stage::Draw()
 			{
 				DrawBox(posX,posY,posX + blockSize,posY + blockSize, GetColor(215, 0, 0), true);
 			}
-			else
+			else if(stageArrange[i][j] == 1 || stageArrange[i][j] == 2)
 			{
 				DrawBox(posX,posY,posX + blockSize,posY + blockSize, GetColor(250, 200, 170), true);
 			}
@@ -112,11 +113,12 @@ void Stage::GetRandomStage()
 	bool selectedStage = true;
 	int vertical;		//c
 	int beside;			//‰¡
+	srand((unsigned int)time(NULL));
 
 	while (true)
 	{
-		vertical = rand() % 11;
-		beside = rand() % 19;
+		vertical = rand() % mapHeight;
+		beside = rand() % mapWidth;
 
 		if (stageArrange[vertical][beside] == 1)
 		{
@@ -125,10 +127,7 @@ void Stage::GetRandomStage()
 			getPosY = mapOffSetY + blockSize * vertical;
 			break;
 		}
-
 	}
-
-	
 }
 
 int Stage::GetStagePosX()

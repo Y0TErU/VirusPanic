@@ -12,7 +12,7 @@ public:
 
 	//uiŠÖŒW‚ÌŠÖ”
 	void LoadUiTexture();	//SPACE_KEY‚ÌUI
-	void DrawSpaceKey();	
+	void DrawSpaceKey(ObjBase* friend_);
 	void DeleteSpaceKey();
 
 	//”’ŒŒ‹…‚Æ‚Ì”»’è—p

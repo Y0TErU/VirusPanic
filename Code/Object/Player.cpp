@@ -189,11 +189,11 @@ void Player::Draw()
 	}
 }
 
-void Player::DrawSpaceKey()
+void Player::DrawSpaceKey(ObjBase* friend_)
 {
 	if (canTouch == true)
 	{
-		DrawGraph(posX, posY, handle_space, true);
+		DrawGraph(friend_->GetPosX() - 17, friend_->GetPosY() + 69, handle_space, true);
 	}
 }
 
