@@ -89,6 +89,6 @@ void ChangeStateFriend(Friend* friend_);			//状態変化(疲れている)
 void CrateFriends(Friend* friend_,int create_num_);	//生成
 void UpdateFriends(Friend* friend_);				//更新
 int SearchTiredFriend(Friend* friend_);				//疲れているオブジェクトを探す
-void EraseFriend(Friend* friend_);					//生存フラグが立っていないオブジェクトを消す
+//void EraseFriend(Friend* friend_);					//生存フラグが立っていないオブジェクトを消す
 
 void PlayAnimation(Friend* friend_);

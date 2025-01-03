@@ -44,9 +44,6 @@ void InitializeGameScene()
 {	
 	SetBackgroundColor(255, 233, 207);		//背景色変更
 
-	SetMouseDispFlag(TRUE);	//マウスを表示
-
-
 	vaccine.Initialize();
 	timer.Initialize();
 	InitializeEnemies(virus);
@@ -128,7 +125,7 @@ void UpdateGameScene()
 	//白血球の更新処理
 	ChangeStateFriend(whiteBloodCell);
 	UpdateFriends(whiteBloodCell);
-	EraseFriend(whiteBloodCell);
+	//EraseFriend(whiteBloodCell);
 	
 	//updateの中でマス分の白血球をチェック
 	if (whiteBloodCell[SearchTiredFriend(whiteBloodCell)].GetCurrentState() == true)

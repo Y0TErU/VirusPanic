@@ -117,12 +117,41 @@ void Friend::Draw()
 
 void Friend::PlayAnim()
 {
+	static int counter = 0;
 	if (beforeIsActive == true && isActive == false)
 	{
-		for (int i = 0; i < 6; i++)
+		if (counter < 5)
 		{
-			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_animation[i], true);
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_animation[0], true);
 		}
+		else if (counter < 10)
+		{
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_animation[1], true);
+		}
+		else if (counter < 15)
+		{
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_animation[2], true);
+		}
+		else if (counter < 20)
+		{
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_animation[3], true);
+		}
+		else if (counter < 25)
+		{
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_animation[4], true);
+		}
+		else if (counter < 30)
+		{
+			DrawExtendGraph(static_cast<int>(posX), static_cast<int>(posY), static_cast<int>(posX + width), static_cast<int>(posY + height), handle_animation[5], true);
+		}
+
+		if (counter > 30)
+		{
+			counter = 0;
+			Erace();
+		}
+
+		counter++;
 	}
 }
 
@@ -185,6 +214,10 @@ void CrateFriends(Friend* friend_,int create_num_)
 	}
 }
 
+/*
+
+//削除はアニメーションの最後にする
+
 void EraseFriend(Friend* friend_)
 {
 	for (int i = 0; i < FriendMaxNum; i++)
@@ -195,6 +228,8 @@ void EraseFriend(Friend* friend_)
 		}
 	}
 }
+*/
+
 
 int SearchTiredFriend(Friend* friend_)
 {

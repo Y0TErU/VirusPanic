@@ -3,7 +3,6 @@
 #include <Dxlib.h>
 #include <math.h>
 #include <stdlib.h>
-#include <time.h>
 
 void Stage::Draw()
 {
@@ -16,17 +15,17 @@ void Stage::Draw()
 
 			if (stageArrange[i][j] == 0)
 			{
-				DrawBox(posX,posY,posX + blockSize,posY + blockSize, GetColor(215, 0, 0), true);
+				DrawBox(posX, posY, posX + blockSize, posY + blockSize, GetColor(215, 0, 0), true);
 			}
-			else if(stageArrange[i][j] == 1 || stageArrange[i][j] == 2)
+			else
 			{
-				DrawBox(posX,posY,posX + blockSize,posY + blockSize, GetColor(250, 200, 170), true);
+				DrawBox(posX, posY, posX + blockSize, posY + blockSize, GetColor(250, 200, 170), true);
 			}
 		}
 	}
 }
 
-bool Stage::OnCollisionStageToRect(int min_x_, int max_x_, int min_y_, int max_y_, 
+bool Stage::OnCollisionStageToRect(int min_x_, int max_x_, int min_y_, int max_y_,
 	float vec_x_, float vec_y_, float* side_x_, float* side_y_)
 {
 	for (int i = min_y_; i <= max_y_; i++)
@@ -75,7 +74,7 @@ bool Stage::OnCollisionStageAndRect(RectCollider rect_, float vec_x_, float vec_
 	int minX = (rect_.posX - mapOffSetX) / blockSize;						//âEï”
 	int maxX = ((rect_.posX + rect_.width) - mapOffSetX) / blockSize;		//ç∂ï”
 	int minY = (rect_.posY - mapOffSetY) / blockSize;						//è„ï”
-	int maxY = ((rect_.posY + rect_.height)- mapOffSetY) / blockSize;		//â∫ï”
+	int maxY = ((rect_.posY + rect_.height) - mapOffSetY) / blockSize;		//â∫ï”
 	bool isCollision = false;
 
 	if (vec_x_ > 0.0f)
@@ -113,12 +112,11 @@ void Stage::GetRandomStage()
 	bool selectedStage = true;
 	int vertical;		//èc
 	int beside;			//â°
-	srand((unsigned int)time(NULL));
 
 	while (true)
 	{
-		vertical = rand() % mapHeight;
-		beside = rand() % mapWidth;
+		vertical = rand() % 11;
+		beside = rand() % 19;
 
 		if (stageArrange[vertical][beside] == 1)
 		{
@@ -127,7 +125,10 @@ void Stage::GetRandomStage()
 			getPosY = mapOffSetY + blockSize * vertical;
 			break;
 		}
+
 	}
+
+
 }
 
 int Stage::GetStagePosX()
