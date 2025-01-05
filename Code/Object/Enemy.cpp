@@ -104,14 +104,15 @@ void Enemy::Update(ObjBase* target_)
 			{
 				posX = side + 1.0f;
 			}
-			rect_collider.posX = posX;
+			
 		}
-
+		rect_collider.posX = posX;
 		//YŽ²‚Ì•Ç‚Æ‚ÌÚG”»’è
 		rect_collider.posY = nextPosY;
 		if (enemyToStage.OnCollisionStageAndRect(rect_collider, 0.0f, vecY, nullptr, &side) == false)
 		{
 			posY = nextPosY;
+
 		}
 		else
 		{
@@ -123,9 +124,62 @@ void Enemy::Update(ObjBase* target_)
 			{
 				posY = side + 1.0f;
 			}
+			
+		}
+		
+		rect_collider.posY = posY;
+	}
+}
+
+void Enemy::ToEnemy(Enemy* target_)
+{
+	if (isActive == true && target_->GetIsActive() == true)
+	{
+		int toOtherEnemyX = target_->GetPosX();
+		int toOtherEnemyY = target_->GetPosY();
+
+		nextPosX = posX;
+		nextPosY = posY;
+
+		rect_collider.posX = nextPosX;
+		//‹éŒ`“¯Žm‚Ì“–‚½‚è”»’è
+		if (OnCollisionRectToRect(rect_collider, *target_->GetCollider()) == false)
+		{
+			posX = nextPosX;
+		}
+		else
+		{
+			if (vecX > 0)
+			{
+				posX = target_->GetPosX() + width + 1;
+			}
+			else if (vecX < 0)
+			{
+				posX = target_->GetPosX() + 1;
+			}
+			rect_collider.posX = posX;
+		}
+
+		rect_collider.posY = nextPosY;
+		if (OnCollisionRectToRect(rect_collider, *target_->GetCollider()) == false)
+		{
+			posY = nextPosY;
+		}
+		else
+		{
+			if (vecY > 0)
+			{
+				posY = target_->GetPosY()  + 1;
+			}
+			else if (vecY < 0)
+			{
+				posY = target_->GetPosY() + height + 1;
+			}
 			rect_collider.posY = posY;
 		}
+
 	}
+
 }
 
 void Enemy::ToPlayer(ObjBase* player_)

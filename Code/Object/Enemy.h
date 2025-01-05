@@ -14,6 +14,7 @@ public:
 	void Update(ObjBase* target_);	//XVˆ—
 	void Draw() override;			//•`‰æˆ—
 
+	void ToEnemy(Enemy* target_);
 	void ToPlayer(ObjBase* player_);
 	void ToFriend(bool isTouch_, RectCollider* friend_top_, RectCollider* friend_botom_, RectCollider* friend_left_, RectCollider* friend_right_);
 	bool TouchFriend(bool isActive_);

@@ -116,8 +116,6 @@ void UpdateGameScene()
 		virus[i].ToPlayer(&vaccine);
 	}
 	
-
-	
 	//更新処理
 	timer.Update();	//時間の更新
 	vaccine.Update();	//プレイヤーの更新
@@ -127,19 +125,27 @@ void UpdateGameScene()
 	UpdateFriends(whiteBloodCell);
 	//EraseFriend(whiteBloodCell);
 	
-	//updateの中でマス分の白血球をチェック
 	if (whiteBloodCell[SearchTiredFriend(whiteBloodCell)].GetCurrentState() == true)
 	{
-		if (EnemyToEnemy(virus) == true)
-		{
-			UpdateEnemies(virus, &whiteBloodCell[SearchTiredFriend(whiteBloodCell)]);
-		}
+		UpdateEnemies(virus, &whiteBloodCell[SearchTiredFriend(whiteBloodCell)]);
 	}
 	else	//いたらターゲットの変更
 	{
-		if (EnemyToEnemy(virus) == true)
+		UpdateEnemies(virus, &vaccine);
+	}
+
+	if (EnemyToEnemy(virus) == true)
+	{
+		for (int i = 0; i < EnemyMaxNum; i++)
 		{
-			UpdateEnemies(virus, &vaccine);
+			for (int j = i + 1; j < EnemyMaxNum; j++)
+			{
+				if (virus[i].GetIsActive() == true && virus[j].GetIsActive() == true)
+				{
+					virus[i].ToEnemy(&virus[j]);
+				}
+				
+			}
 		}
 	}
 	
