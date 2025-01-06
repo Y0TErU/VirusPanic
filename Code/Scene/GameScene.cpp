@@ -7,6 +7,8 @@
 #include "../Object/Stage.h"
 #include "../Object/Timer.h"
 
+#include "../Sound/Sound.h"
+
 #include <Dxlib.h>
 #include <math.h>
 
@@ -21,6 +23,7 @@ Timer timer;
 
 Stage stage;
 
+Sound s_gamePlay;
 
 void ExecuteGameScene()
 {
@@ -48,11 +51,14 @@ void InitializeGameScene()
 	timer.Initialize();
 	InitializeEnemies(virus);
 	InitializeFriends(whiteBloodCell);
+
+	int play_s_handle = LoadSoundMem("Sound/play.m4a");
 	
 	//ï`âÊÇÃì«Ç›çûÇ›
 	vaccine.LoadTexture();
 	vaccine.LoadUiTexture();
 	timer.Load();
+	s_gamePlay.Load(play_s_handle);
 
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
@@ -68,6 +74,7 @@ void InitializeGameScene()
 
 void UpdateGameScene()
 {
+	s_gamePlay.LoopPlay();
 	//ê∂ê¨èàóù
 	if (timer.GetCurrentCounter() == 0)	//èâä˙ê∂ê¨
 	{
@@ -134,20 +141,7 @@ void UpdateGameScene()
 		UpdateEnemies(virus, &vaccine);
 	}
 
-	if (EnemyToEnemy(virus) == true)
-	{
-		for (int i = 0; i < EnemyMaxNum; i++)
-		{
-			for (int j = i + 1; j < EnemyMaxNum; j++)
-			{
-				if (virus[i].GetIsActive() == true && virus[j].GetIsActive() == true)
-				{
-					virus[i].ToEnemy(&virus[j]);
-				}
-				
-			}
-		}
-	}
+	EnemyToEnemy(virus);
 	
 	//ï`âÊèàóù
 	ClearDrawScreen();
@@ -191,10 +185,11 @@ void TerminateGameScene()
 	vaccine.Delete();
 	vaccine.DeleteSpaceKey();
 	timer.Delete();
-	for (int i = 0; i < EnemyMaxNum; i++)
-	{
-		virus[i].Delete();
-	}
+
+	s_gamePlay.Delete();
+
+	DeleteEnemyHandle(virus);
+
 	for (int i = 0; i < FriendMaxNum; i++)
 	{
 		whiteBloodCell[i].Delete();

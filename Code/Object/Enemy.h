@@ -13,6 +13,7 @@ public:
 	void LoadTexture();				//•`‰æ‚Ì“Ç‚İ‚İ
 	void Update(ObjBase* target_);	//XVˆ—
 	void Draw() override;			//•`‰æˆ—
+	void Delete();
 
 	void ToEnemy(Enemy* target_);
 	void ToPlayer(ObjBase* player_);
@@ -34,6 +35,6 @@ private:
 void InitializeEnemies(Enemy* enemy_);
 void CreateEnemies(Enemy* enemy_);
 void UpdateEnemies(Enemy* enemy_, ObjBase* target_);
-bool EnemyToEnemy(Enemy* enemy_);
-
+void EnemyToEnemy(Enemy* enemy_);
+void DeleteEnemyHandle(Enemy* enemy_);
 

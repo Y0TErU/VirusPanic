@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "OverScene.h"
 #include "../Object/Ui.h"
+#include "../Sound/Sound.h"
 
 #include <Dxlib.h>
 
@@ -11,6 +12,9 @@ extern int g_nextScene;	//次のシーン
 
 Button textTitle;
 Button textReplay;
+Text GAMEOVER;
+
+Sound s_gameOver;
 
 void ExecuteOverScene()
 {
@@ -37,6 +41,11 @@ void InitializeOverScene()
 	int title_text_handle = LoadGraph("Res/Text/returntitle_write.png");
 	int replay_text_handle = LoadGraph("Res/Text/onemoreplay_write.png");
 	int bitton_handle = LoadGraph("Res/Button/Start.png");
+	int gameover_handle = LoadGraph("Res/Text/gameover_write.png");
+
+	int over_s_shandle = LoadSoundMem("Sound/gameover.m4a");
+
+	s_gameOver.Load(over_s_shandle);
 
 	SetMouseDispFlag(TRUE);	//マウスを表示
 
@@ -45,6 +54,7 @@ void InitializeOverScene()
 
 	textTitle.Initialize();
 	textReplay.Initialize();
+	GAMEOVER.Initialize(360, 200, 1200, 293, gameover_handle);
 
 	g_nextScene = 0;
 
@@ -52,14 +62,22 @@ void InitializeOverScene()
 }
 void UpdateOverScene()
 {
+	static bool count = false;
 
-	textTitle.Update(660, 700, 600, 150);
-	textReplay.Update(660, 900, 600, 150);
+	textTitle.Update(660, 900, 600, 150);
+	textReplay.Update(660, 700, 600, 150);
+
+	if (count == false)
+	{
+		s_gameOver.BackGroundPlay();
+		count = true;
+	}
 
 	ClearDrawScreen();
 
 	textTitle.Draw();
 	textReplay.Draw();
+	GAMEOVER.Draw();
 
 	ScreenFlip();
 
@@ -67,17 +85,24 @@ void UpdateOverScene()
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = title;
+		count = false;
 	}
 	if (textReplay.GetMouseClick() == true)
 	{
 		g_CurrentSceneStep = teminate;
 		g_nextScene = game;
+		count = false;
 	}
 
 }
 void TerminateOverScene()
 {
 	SetMouseDispFlag(FALSE);	//マウスを非表示にする
+
+	GAMEOVER.Delete();
+	textTitle.Delete();
+	textReplay.Delete();
+	s_gameOver.Delete();
 
 	g_CurrentSceneStep = init;
 	if (g_nextScene == title)

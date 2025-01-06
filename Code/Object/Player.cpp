@@ -4,7 +4,11 @@
 #include "Player.h"
 #include "Stage.h"
 
+#include "../Sound/Sound.h"
+
 Stage playerToStage;
+
+Sound s_touch;
 
 void Player::Initialize()
 {
@@ -26,6 +30,11 @@ void Player::Initialize()
 	handle_back = -1;
 	//UIƒnƒ“ƒhƒ‹
 	handle_space = -1;
+
+	int touch_s_handle = LoadSoundMem("Sound/hakkekkyu_touch.m4a");
+
+	s_touch.Load(touch_s_handle);
+
 }
 
 void Player::LoadTexture()
@@ -154,6 +163,7 @@ bool Player::TouchFriend(bool isActive_,bool tired_)
 		if (canTouch == true && CheckHitKey(KEY_INPUT_SPACE))
 		{
 			canTouch = false;
+			s_touch.BackGroundPlay();
 			return true;
 		}
 		return false;
@@ -200,4 +210,5 @@ void Player::DrawSpaceKey(ObjBase* friend_)
 void Player::DeleteSpaceKey()
 {
 	DeleteGraph(handle_space);
+	s_touch.Delete();
 }

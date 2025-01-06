@@ -4,12 +4,16 @@
 #include "Enemy.h"
 #include "Stage.h"
 
+#include "../Sound/Sound.h"
+
 Stage enemyToStage;
+
+Sound s_catch;
 
 void Enemy::Initialize()
 {
 	posX = 148;
-	posY = 600;
+	posY = 970;
 	speed = 5.2;
 	isActive = false;
 	height = 75;
@@ -26,6 +30,8 @@ void Enemy::Initialize()
 	handle_right = -1;
 	handle_left = -1;
 	handle_back = -1;
+
+
 }
 
 void Enemy::Create(int pos_x_, int pos_y_)
@@ -33,6 +39,10 @@ void Enemy::Create(int pos_x_, int pos_y_)
 	posX = pos_x_;
 	posY = pos_y_;
 	isActive = true;
+
+	int catch_s_handle = LoadSoundMem("Sound/hakkekkyu_transform.m4a");
+
+	s_catch.Load(catch_s_handle);
 }
 
 void Enemy::LoadTexture()
@@ -104,7 +114,6 @@ void Enemy::Update(ObjBase* target_)
 			{
 				posX = side + 1.0f;
 			}
-			
 		}
 		rect_collider.posX = posX;
 		//YŽ²‚Ì•Ç‚Æ‚ÌÚG”»’è
@@ -133,54 +142,50 @@ void Enemy::Update(ObjBase* target_)
 
 void Enemy::ToEnemy(Enemy* target_)
 {
-	if (isActive == true && target_->GetIsActive() == true)
+	int toOtherEnemyX = target_->GetPosX();
+	int toOtherEnemyY = target_->GetPosY();
+
+	nextPosX = posX;
+	nextPosY = posY;
+
+	rect_collider.posX = nextPosX;
+	//‹éŒ`“¯Žm‚Ì“–‚½‚è”»’è
+	if (OnCollisionRectToRect(rect_collider, *target_->GetCollider()) == false)
 	{
-		int toOtherEnemyX = target_->GetPosX();
-		int toOtherEnemyY = target_->GetPosY();
-
-		nextPosX = posX;
-		nextPosY = posY;
-
-		rect_collider.posX = nextPosX;
-		//‹éŒ`“¯Žm‚Ì“–‚½‚è”»’è
-		if (OnCollisionRectToRect(rect_collider, *target_->GetCollider()) == false)
+		posX = nextPosX;
+	}
+	else
+	{
+		if (vecX > 0)
 		{
-			posX = nextPosX;
+			posX = target_->GetPosX() - width;
 		}
-		else
+		else if (vecX < 0)
 		{
-			if (vecX > 0)
-			{
-				posX = target_->GetPosX() + width + 1;
-			}
-			else if (vecX < 0)
-			{
-				posX = target_->GetPosX() + 1;
-			}
-			rect_collider.posX = posX;
+			posX = target_->GetPosX() + width;
 		}
-
-		rect_collider.posY = nextPosY;
-		if (OnCollisionRectToRect(rect_collider, *target_->GetCollider()) == false)
-		{
-			posY = nextPosY;
-		}
-		else
-		{
-			if (vecY > 0)
-			{
-				posY = target_->GetPosY()  + 1;
-			}
-			else if (vecY < 0)
-			{
-				posY = target_->GetPosY() + height + 1;
-			}
-			rect_collider.posY = posY;
-		}
-
+		rect_collider.posX = posX;
 	}
 
+	rect_collider.posY = nextPosY;
+	if (OnCollisionRectToRect(rect_collider, *target_->GetCollider()) == false)
+	{
+		posY = nextPosY;
+	}
+	else
+	{
+		if (vecY > 0)
+		{
+			posY = target_->GetPosY() - height;
+		}
+		else if (vecY < 0)
+		{
+			posY = target_->GetPosY() + height;
+		}
+		rect_collider.posY = posY;
+	}
 }
+	
 
 void Enemy::ToPlayer(ObjBase* player_)
 {
@@ -199,6 +204,7 @@ void Enemy::ToFriend(bool isTouch_, RectCollider* friend_top_, RectCollider* fri
 			OnCollisionRectToRect(rect_collider, *friend_left_) == true || OnCollisionRectToRect(rect_collider, *friend_right_) == true)	//“–‚½‚Á‚Ä‚¢‚é
 		{
 			canTouch = true;	//ƒ^ƒbƒ`
+			s_catch.BackGroundPlay();
 		}
 		else
 		{
@@ -244,6 +250,15 @@ void Enemy::Draw()
 	}
 }
 
+void Enemy::Delete()
+{
+	DeleteGraph(handle_front);
+	DeleteGraph(handle_back);
+	DeleteGraph(handle_right);
+	DeleteGraph(handle_left);
+	s_catch.Delete();
+}
+
 
 
 void InitializeEnemies(Enemy* enemy_)
@@ -274,21 +289,24 @@ void UpdateEnemies(Enemy* enemy_, ObjBase* target_)
 	}
 }
 
-bool EnemyToEnemy(Enemy* enemy_)
+void EnemyToEnemy(Enemy* enemy_)
 {
 	for (int i = 0; i < EnemyMaxNum; i++)
 	{
-		for (int j = 0; j < EnemyMaxNum; j++)
+		for (int j = i + 1; j < EnemyMaxNum; j++)
 		{
-			if (OnCollisionRectToRect(*enemy_[i].GetCollider(), *enemy_[j].GetCollider()) == true)
+			if (enemy_[i].GetIsActive() == true && enemy_[j].GetIsActive() == true)
 			{
-				return true;
-			}
-			else
-			{
-				return false;
-
+				enemy_[i].ToEnemy(&enemy_[j]);
 			}
 		}
+	}
+}
+
+void DeleteEnemyHandle(Enemy* enemy_)
+{
+	for (int i = 0; i < EnemyMaxNum; i++)
+	{
+		enemy_[i].Delete();
 	}
 }
